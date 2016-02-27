@@ -6,24 +6,26 @@ public class Main {
         String login = "postgres";
         String parol = "11111111";
         Connection connection = getConnection(baseName, login, parol);
+
         Statement statement = null;
 
 //        create table
-//        String sql = "CREATE TABLE user1 " +
-//                "(ID INT PRIMARY KEY     NOT NULL," +
-//                " NAME           TEXT    NOT NULL, " +
-//                " SALARY         REAL)";
-//        statement.executeUpdate(sql);
-
-
+        statement = connection.createStatement();
+        String tableName = "user224";
+        String sql = "CREATE TABLE " + tableName + " " +
+                "(ID INT PRIMARY KEY     NOT NULL," +
+                " NAME           TEXT    NOT NULL, " +
+                " SALARY         REAL)";
+        statement.executeUpdate(sql);
+        statement.close();
 
 //        insert string to table
-//        String sq2 = "INSERT INTO user1 (ID,NAME,SALARY) "
-//                + "VALUES (117, 'Paul', 20000.00 );";
-//        statement.executeUpdate(sq2);
+        String sq2 = "INSERT INTO user1 (ID,NAME,SALARY) "
+                + "VALUES (119, 'Paul', 20000.00 );";
+        insertString(connection, sq2);
 
-        String sq3 = "UPDATE user1 set SALARY = 25000.00 where ID=1;";
         //update string in table
+        String sq3 = "UPDATE user1 set SALARY = 25000.00 where ID=1;";
         updateStringInTable(connection, sq3);
 
         int StringDeleting = 1;
@@ -32,6 +34,20 @@ public class Main {
         deleteStringInTable(connection, StringDeleting);
 
         //select and print all in table
+        selectAll(connection);
+
+        connection.close();
+    }
+
+    protected static void insertString(Connection connection, String sq2) throws SQLException {
+        Statement statement;
+        statement = connection.createStatement();
+        statement.executeUpdate(sq2);
+        statement.close();
+    }
+
+    protected static void selectAll(Connection connection) throws SQLException {
+        Statement statement;
         statement = connection.createStatement();
         String qs11 = "SELECT * FROM user1";
         ResultSet rs1 = statement.executeQuery(qs11);
@@ -46,7 +62,7 @@ public class Main {
             System.out.println();
         }
         statement.close();
-        connection.close();
+//        connection.close();
     }
 
     protected static void deleteStringInTable(Connection connection, int stringDeleting) throws SQLException {
