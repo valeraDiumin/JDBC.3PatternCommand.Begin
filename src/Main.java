@@ -2,14 +2,11 @@ import java.sql.*;
 
 public class Main {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        Connection connection = null;
-            Class.forName("org.postgresql.Driver");
-            connection = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/base_russian",
-                            "postgres", "11111111");
-            System.out.println("Connecting to database...");
-
-        Statement statement = connection.createStatement();
+        String baseName = "base_russian";
+        String login = "postgres";
+        String parol = "11111111";
+        Connection connection = getConnection(baseName, login, parol);
+        Statement statement = null;
 
 //        create table
 //        String sql = "CREATE TABLE user1 " +
@@ -21,19 +18,21 @@ public class Main {
 
 
 //        insert string to table
-        String sq2 = "INSERT INTO user1 (ID,NAME,SALARY) "
-                + "VALUES (117, 'Paul', 20000.00 );";
-        statement.executeUpdate(sq2);
+//        String sq2 = "INSERT INTO user1 (ID,NAME,SALARY) "
+//                + "VALUES (117, 'Paul', 20000.00 );";
+//        statement.executeUpdate(sq2);
 
-        //update string in table
         String sq3 = "UPDATE user1 set SALARY = 25000.00 where ID=1;";
-        statement.executeUpdate(sq3);
+        //update string in table
+        updateStringInTable(connection, sq3);
+
+        int StringDeleting = 1;
 
         //delete string in table
-        String sq333 = "DELETE FROM user1 WHERE ID = 6;";
-        statement.executeUpdate(sq333);
+        deleteStringInTable(connection, StringDeleting);
 
         //select and print all in table
+        statement = connection.createStatement();
         String qs11 = "SELECT * FROM user1";
         ResultSet rs1 = statement.executeQuery(qs11);
         //print query
@@ -48,5 +47,25 @@ public class Main {
         }
         statement.close();
         connection.close();
+    }
+
+    protected static void deleteStringInTable(Connection connection, int stringDeleting) throws SQLException {
+        String sq333 = "DELETE FROM user1 WHERE ID = " + stringDeleting + ";";
+        connection.createStatement().executeUpdate(sq333);
+    }
+
+    private static void updateStringInTable(Connection connection, String sq3) throws SQLException {
+        Statement statement1 = connection.createStatement();
+        statement1.executeUpdate(sq3);
+    }
+
+    private static Connection getConnection(String baseName, String login, String parol) throws ClassNotFoundException, SQLException {
+        Class.forName("org.postgresql.Driver");
+        Connection connection = null;
+        connection = DriverManager
+                    .getConnection("jdbc:postgresql://localhost:5432/" + baseName + "",
+                            login, parol);
+        System.out.println("Connecting to database...");
+        return connection;
     }
 }
