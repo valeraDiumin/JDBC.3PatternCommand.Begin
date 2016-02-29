@@ -1,57 +1,60 @@
 import java.sql.*;
+import java.util.Random;
 
 public class Main {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        String baseName = "base_russian";
-        String login = "postgres";
-        String parol = "11111111";
-        Connection connection = getConnection(baseName, login, parol);
+        Connection connection = null;
+        Class.forName("org.postgresql.Driver");
+        connection = DriverManager
+                .getConnection("jdbc:postgresql://localhost:5432/test",
+                        "postgres", "11111111");
+        System.out.println("Connecting to database...");
 
-        Statement statement = null;
+        Statement statement = connection.createStatement();
 
-//        create table
-        statement = connection.createStatement();
-        String tableName = "user224";
-        String sql = "CREATE TABLE " + tableName + " " +
-                "(ID INT PRIMARY KEY     NOT NULL," +
-                " NAME           TEXT    NOT NULL, " +
-                " SALARY         REAL)";
-        statement.executeUpdate(sql);
-        statement.close();
+        String insert = "INSERT INTO user3 (ID,NAME,SALARY) "
+                + "VALUES (77786, 'Paul', '20000' );";
+       // insert(connection, insert);
 
-//        insert string to table
-        String sq2 = "INSERT INTO user1 (ID,NAME,SALARY) "
-                + "VALUES (119, 'Paul', 20000.00 );";
-        insertString(connection, sq2);
+        String update = "UPDATE user3 SET salary = ? WHERE id > 3";
+        update(connection, update);
 
-        //update string in table
-        String sq3 = "UPDATE user1 set SALARY = 25000.00 where ID=1;";
-        updateStringInTable(connection, sq3);
+        String delete = "DELETE FROM user3 WHERE ID = 7;";
+        statement.executeUpdate(delete);
 
-        int StringDeleting = 1;
+        String selectAndPrint = "SELECT * FROM user3";
+        //selectAndPrint(connection, selectAndPrint);
 
-        //delete string in table
-        deleteStringInTable(connection, StringDeleting);
-
-        //select and print all in table
-        selectAll(connection);
+        //list of the tables
+        DatabaseMetaData dbmd = connection.getMetaData();
+        try (ResultSet tables = dbmd.getTables(null, null, "%", new String[] { "TABLE" })) {
+            while (tables.next()) {
+                System.out.println(tables.getString("TABLE_NAME"));
+            }
+        }
+        //second approach as Baglay in lection
+        Statement statement2 = connection.createStatement();
+        String selectAndPrint1 = "SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type = 'BASE TABLE'";
+        ResultSet rs1 = statement2.executeQuery(selectAndPrint1);
+        while ( rs1.next() ) {
+            String id = rs1.getString("table_name");
+            System.out.print( " table_name = " + id );
+            System.out.println();
+        }
 
         connection.close();
     }
 
-    protected static void insertString(Connection connection, String sq2) throws SQLException {
-        Statement statement;
-        statement = connection.createStatement();
-        statement.executeUpdate(sq2);
-        statement.close();
+    protected static void update(Connection connection, String update) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(update);
+        preparedStatement.setString(1, "" + 25000 + new Random().nextInt(10000));
+        preparedStatement.executeUpdate();
+        preparedStatement.close();
     }
 
-    protected static void selectAll(Connection connection) throws SQLException {
-        Statement statement;
-        statement = connection.createStatement();
-        String qs11 = "SELECT * FROM user1";
-        ResultSet rs1 = statement.executeQuery(qs11);
-        //print query
+    protected static void selectAndPrint(Connection connection, String qs11) throws SQLException {
+        Statement statement2 = connection.createStatement();
+        ResultSet rs1 = statement2.executeQuery(qs11);
         while ( rs1.next() ) {
             int id = rs1.getInt("id");
             String  name = rs1.getString("name");
@@ -61,27 +64,13 @@ public class Main {
             System.out.print( " SALARY = " + salary );
             System.out.println();
         }
-        statement.close();
-//        connection.close();
+        rs1.close();
+        statement2.close();
     }
 
-    protected static void deleteStringInTable(Connection connection, int stringDeleting) throws SQLException {
-        String sq333 = "DELETE FROM user1 WHERE ID = " + stringDeleting + ";";
-        connection.createStatement().executeUpdate(sq333);
-    }
-
-    private static void updateStringInTable(Connection connection, String sq3) throws SQLException {
+    protected static void insert(Connection connection, String insert) throws SQLException {
         Statement statement1 = connection.createStatement();
-        statement1.executeUpdate(sq3);
-    }
-
-    private static Connection getConnection(String baseName, String login, String parol) throws ClassNotFoundException, SQLException {
-        Class.forName("org.postgresql.Driver");
-        Connection connection = null;
-        connection = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/" + baseName + "",
-                            login, parol);
-        System.out.println("Connecting to database...");
-        return connection;
+        statement1.executeUpdate(insert);
+        statement1.close();
     }
 }
