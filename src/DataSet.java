@@ -1,4 +1,4 @@
-import java.sql.ResultSet;
+import java.util.Arrays;
 
 /**
  * Created by 123 on 28.02.2016.
@@ -23,10 +23,32 @@ static class Data {
         return value;
     }
 }
-    public Data [] datas = new Data[100];//TODO magic number 100
-    public int index = 0;
+    public Data [] ColumnsInData = new Data[100];//TODO magic number 100
+    public int amountOfColumnsInIncomingString = 0;
 
     public void put(String columnName, Object value) {
-        datas[index++] = new Data(columnName, value);
+        ColumnsInData[amountOfColumnsInIncomingString++] = new Data(columnName, value);
+    }
+    public Object[] getValues(){
+        Object[] result = new Object[amountOfColumnsInIncomingString];
+        for (int i = 0; i < amountOfColumnsInIncomingString; i++) {
+            result[i] = ColumnsInData[i].getValue();
+        }
+        return result;
+    }
+    public String[] getcolumnNames(){
+        String[] result = new String[amountOfColumnsInIncomingString];
+        for (int i = 0; i < amountOfColumnsInIncomingString; i++) {
+            result[i] = ColumnsInData[i].getColumnName();
+        }
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "DataSet{\n" +
+                "columnNames =" + Arrays.toString(getcolumnNames()) + "\n" +
+                "  getValues =" + Arrays.toString(getValues()) + "\n" +
+                '}' + "\n";
     }
 }
