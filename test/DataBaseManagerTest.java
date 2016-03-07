@@ -6,9 +6,6 @@ import java.util.Arrays;
 import static junit.framework.TestCase.assertEquals;
 
 
-/**
- * Created by 123 on 04.03.2016.
- */
 public class DataBaseManagerTest {
 
     private DataBaseManager dataBaseManager;
@@ -34,13 +31,13 @@ public class DataBaseManagerTest {
 //        give table from base and prepare it for test
         dataBaseManager.clearTable(tableName1);
 
-        // when create string in base
+        // when createStringInTable string in base
         DataSet data = new DataSet();
         data.put("id", 3);
         data.put("NAME", "Jack Bob");
         data.put("SALARY", "1000000");
         //put data to DataSet object
-        dataBaseManager.create(data, tableName1); // I have to give to method the name of table or hardcode it to method create
+        dataBaseManager.createStringInTable(data, tableName1); // I have to give to method the name of table or hardcode it to method createStringInTable
 
         //give data from base and test array of data length (amount of strings in data)
         DataSet[] users = dataBaseManager.getTableData(tableName1);
@@ -64,20 +61,35 @@ public class DataBaseManagerTest {
     @Test
     public void updateTest() {
 
+        //        give table from base and prepare it for test
+        dataBaseManager.clearTable(tableName1);
+
+        // when createStringInTable string in base
+        DataSet updateData = new DataSet();
+        updateData.put("id", 3);
+        updateData.put("NAME", "Jack Bob");
+        updateData.put("SALARY", "1000000");
+        //put data to DataSet object
+        dataBaseManager.createStringInTable(updateData, tableName1); // I have to give to method the name of table or hardcode it to method createStringInTable
+
+        DataSet updateData1 = new DataSet();
+//        updateData1.put("id", 3);
+        updateData1.put("NAME", "Jack");
+        updateData1.put("SALARY", "1000"); // to DataSet
+
         // begin with string in table from previous tests
-        dataBaseManager.updateFromDataSet(tableName1, "3", "1000");
+        dataBaseManager.updateFromDataSet(tableName1, updateData1, 3);// Directly to Postgresql base
         //give data from base and test array of data length (amount of strings in data)
+
         DataSet[] users = dataBaseManager.getTableData(tableName1);
 
         assertEquals(1, users.length);
-        System.out.println("assertEquals with amount strings in table " + tableName1 + " have done successfully");
 
         //give first string from array with definite date, created by us
         // and test is data same?
         DataSet user = users[0];
 
         assertEquals("[id, name, salary]", Arrays.toString(user.getcolumnNames()));
-        assertEquals("[3, Jack Bob, 1000]", Arrays.toString(user.getValues()));
-
+        assertEquals("[3, Jack, 1000]", Arrays.toString(user.getValues()));
     }
 }

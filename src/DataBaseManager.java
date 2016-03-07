@@ -8,14 +8,12 @@ public class DataBaseManager {
 
 
     public static void main(String[] args) throws SQLException {
-        Connection connection = null;
         String baseName = "postgres";
         String login = "postgres";
         String parole = "11111111";
 
         DataBaseManager manager = new DataBaseManager();
         manager.connect(baseName, login, parole);
-        connection = manager.getConnection();
 
         tableName = "user12";
 //         manager.createNewTable(tableName);
@@ -39,7 +37,7 @@ public class DataBaseManager {
         data.put("id", 3);
         data.put("name", "Jack Bobo");
         data.put("salary", "1000000");
-        manager.create(data, tableName);
+        manager.createStringInTable(data, tableName);
 
         manager.selectAndPrint();
 //
@@ -47,31 +45,41 @@ public class DataBaseManager {
 //        DataSet[] result = manager.getTableData(tableName);
       //  System.out.println(Arrays.toString(result));
         System.out.println("Amount of strings in the table " + tableName + " = " + manager.getSize(tableName));
-
-        connection.close();
     }
-    public void updateFromDataSet(String tableName1, String idNumber, String newSalary) {
+    public void updateFromDataSet(String tableName1, DataSet updateData1, int id) {
         try {
-            String tableNames = "SALARY = ";// = getNameFormated(newValue, "%s = ?,");
-            String update = "UPDATE " + tableName1 + " SET " + tableNames + " ? WHERE id = " + idNumber;
-            PreparedStatement preparedStatement = connection.prepareStatement(update);
+            String format = "%s = ?,";
+            String tableNames = getStringFormatted(updateData1, format);
 
-            preparedStatement.setObject(1, newSalary);
+            String update = "UPDATE " + tableName1 + " SET " + tableNames + " WHERE id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(update);
 
             int index = 1;
 
-//            for (Object value : newValue.getValues()) {
-//                preparedStatement.setObject(index, value);
-//                index++;
-//            }
+            for (Object value : updateData1.getValues()) {
+                preparedStatement.setObject(index, value);
+                index++;
+            }
+            preparedStatement.setObject(index, id);
 
             preparedStatement.executeUpdate();
+
             System.out.println("updating have done successfully");
             preparedStatement.close();
         } catch (SQLException e){
             e.printStackTrace();
         }
     }
+
+    private String getStringFormatted(DataSet updateData1, String format) {
+        String tableNames = "";
+        for(String tableNameFromDataSet : updateData1.getcolumnNames()) {
+            tableNames += String.format(format, tableNameFromDataSet);
+        }
+        tableNames = tableNames.substring(0, tableNames.length() - 1);
+        return tableNames;
+    }
+
     public void clearTable(String tableName){
         try {
             Statement statement = connection.createStatement();
@@ -83,28 +91,17 @@ public class DataBaseManager {
             e.printStackTrace();
         }
     }
-    public void create(DataSet input, String tableName1){ // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!
+    public void createStringInTable(DataSet input, String tableName1){ // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!
         try {
             Statement statement = connection.createStatement();
 
-            // create string of column names
-            String StringTableNames = "";
-            for (String name : input.getcolumnNames()) {
-                StringTableNames += name + ",";
-            }
-            StringTableNames = StringTableNames.substring(0, StringTableNames.length() - 1);
-            System.out.println("created string in table " + tableName1 + " ----------------------------------");
-            System.out.println("tableNames " + StringTableNames);
+            // createStringInTable string of column names
+            String format = "%s,";
+            String StringTableNames = getStringFormatted(input, format);
 
-            // create string of column values
-            String StringTableValue = "";
-
-            for (Object value : input.getValues()) {
-                StringTableValue += "'" + value + "'" + ",";
-            }
-            StringTableValue = StringTableValue.substring(0, StringTableValue.length() - 1);// deleting excess comma
-            System.out.println("tableValue " + StringTableValue);
-            System.out.println("");
+            // createStringInTable string of column values
+            String formatValue = "'%s',";
+            String StringTableValue = getStringValue(input, formatValue);
 
             statement.executeUpdate("INSERT INTO " + tableName1  + " (" + StringTableNames + " )"
                     + " VALUES (" + StringTableValue + ")");
@@ -114,7 +111,16 @@ public class DataBaseManager {
         }
     }
 
-    private void createNewTable(String tableName) {
+    private String getStringValue(DataSet input, String formatValue) {
+        String StringTableValue = "";
+        for (Object value : input.getValues()) {
+            StringTableValue += String.format(formatValue, value);
+        }
+        StringTableValue = StringTableValue.substring(0, StringTableValue.length() - 1);// deleting excess comma
+        return StringTableValue;
+    }
+
+    public void createNewTable(String tableName) {
         Statement stmt;
         try {
             stmt = connection.createStatement();
@@ -178,7 +184,7 @@ public class DataBaseManager {
         return anInt;
     }
 
-    protected void selectAndPrint() {
+    public void selectAndPrint() {
 
         try {
             Statement statement2 = connection.createStatement();
@@ -203,7 +209,7 @@ public class DataBaseManager {
         }
     }
 
-    protected void connect(String baseName, String login, String parole) {
+    public void connect(String baseName, String login, String parole) {
         connection = null;
         try {
             Class.forName("org.postgresql.Driver");
@@ -250,7 +256,7 @@ public class DataBaseManager {
         return listOfTables;
     }
 
-    protected static void delete(Connection connection, String delete) {
+    public static void delete(Connection connection, String delete) {
         try {
             Statement statement = connection.createStatement();
             statement.executeUpdate(delete);
@@ -261,7 +267,7 @@ public class DataBaseManager {
         }
     }
 
-    protected static void insert(Connection connection, String insert, String tableName) {
+    public static void insert(Connection connection, String insert, String tableName) {
         try {
             Statement statement1 = connection.createStatement();
             statement1.executeUpdate(insert);
