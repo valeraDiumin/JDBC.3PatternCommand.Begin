@@ -7,45 +7,6 @@ public class DataBaseManager {
     public Connection connection;
 
 
-    public static void main(String[] args) throws SQLException {
-        String baseName = "postgres";
-        String login = "postgres";
-        String parole = "11111111";
-
-        DataBaseManager manager = new DataBaseManager();
-        manager.connect(baseName, login, parole);
-
-        tableName = "user12";
-//         manager.createNewTable(tableName);
-
-        //list of the tables & print
-        String[] listOfAllTables = manager.listOfAllTables();
-        System.out.println(Arrays.toString(listOfAllTables));
-
-        manager.clearTable(tableName);
-//        String insert = "INSERT INTO " + tableName + " (id, name, salary) "
-//                + "VALUES (30, 'Paul', '20000000' );";
-//        insert(connection, insert, tableName);
-//
-
-
-//        String delete = "DELETE FROM " + tableName + " WHERE ID = 3;";
-//        delete(connection, delete);
-
-
-        DataSet data = new DataSet();
-        data.put("id", 3);
-        data.put("name", "Jack Bobo");
-        data.put("salary", "1000000");
-        manager.createStringInTable(data, tableName);
-
-        manager.selectAndPrint();
-//
-        //amount of rows in table for our array with Data - have found.
-//        DataSet[] result = manager.getTableData(tableName);
-      //  System.out.println(Arrays.toString(result));
-        System.out.println("Amount of strings in the table " + tableName + " = " + manager.getSize(tableName));
-    }
     public void updateFromDataSet(String tableName1, DataSet updateData1, int id) {
         try {
             String format = "%s = ?,";
@@ -278,4 +239,3 @@ public class DataBaseManager {
         }
     }
 }
-

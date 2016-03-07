@@ -10,7 +10,6 @@ public class DataBaseManagerTest {
 
     private DataBaseManager dataBaseManager;
     private String tableName1;
-    DataSet data;
 
     @Before
     public void setup() {
