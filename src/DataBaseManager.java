@@ -1,6 +1,5 @@
 import java.sql.*;
 import java.util.Arrays;
-import java.util.Random;
 
 public class DataBaseManager {
     private static String tableName;
@@ -18,46 +17,65 @@ public class DataBaseManager {
         manager.connect(baseName, login, parole);
         connection = manager.getConnection();
 
-        tableName = "user2";
+        tableName = "user12";
 //         manager.createNewTable(tableName);
 
         //list of the tables & print
         String[] listOfAllTables = manager.listOfAllTables();
         System.out.println(Arrays.toString(listOfAllTables));
 
+        manager.clearTable(tableName);
 //        String insert = "INSERT INTO " + tableName + " (id, name, salary) "
-//                + "VALUES (3, 'Paul', '20000000' );";
+//                + "VALUES (30, 'Paul', '20000000' );";
 //        insert(connection, insert, tableName);
 //
 
-//        String update = "UPDATE user3 SET salary = ? WHERE id > 3";
-        //  update(connection, update);
 
-        String delete = "DELETE FROM " + tableName + " WHERE ID = 3;";
-        delete(connection, delete);
+//        String delete = "DELETE FROM " + tableName + " WHERE ID = 3;";
+//        delete(connection, delete);
 
-        manager.clearTable(tableName);
 
         DataSet data = new DataSet();
-        data.put("ID", 2);
-        data.put("NAME", "Jack Bobo");
-        data.put("SALARY", 1000000);
-        manager.create(data);
+        data.put("id", 3);
+        data.put("name", "Jack Bobo");
+        data.put("salary", "1000000");
+        manager.create(data, tableName);
 
-        String selectAll = "SELECT * FROM " + tableName + "";
-        manager.selectAndPrint(selectAll);
+        manager.selectAndPrint();
 //
         //amount of rows in table for our array with Data - have found.
 //        DataSet[] result = manager.getTableData(tableName);
       //  System.out.println(Arrays.toString(result));
-        System.out.println(manager.getSize(tableName));
+        System.out.println("Amount of strings in the table " + tableName + " = " + manager.getSize(tableName));
 
         connection.close();
+    }
+    public void updateFromDataSet(String tableName1, String idNumber, String newSalary) {
+        try {
+            String tableNames = "SALARY = ";// = getNameFormated(newValue, "%s = ?,");
+            String update = "UPDATE " + tableName1 + " SET " + tableNames + " ? WHERE id = " + idNumber;
+            PreparedStatement preparedStatement = connection.prepareStatement(update);
+
+            preparedStatement.setObject(1, newSalary);
+
+            int index = 1;
+
+//            for (Object value : newValue.getValues()) {
+//                preparedStatement.setObject(index, value);
+//                index++;
+//            }
+
+            preparedStatement.executeUpdate();
+            System.out.println("updating have done successfully");
+            preparedStatement.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
     }
     public void clearTable(String tableName){
         try {
             Statement statement = connection.createStatement();
-            String clear = "DELETE FROM " + tableName + " ;";
+            String clear = "DELETE FROM " + tableName + " WHERE id < 100;";
             statement.executeUpdate(clear);
             System.out.println("clearing have done");
             statement.close();
@@ -65,7 +83,7 @@ public class DataBaseManager {
             e.printStackTrace();
         }
     }
-    public void create(DataSet input){ // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!
+    public void create(DataSet input, String tableName1){ // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!
         try {
             Statement statement = connection.createStatement();
 
@@ -75,6 +93,7 @@ public class DataBaseManager {
                 StringTableNames += name + ",";
             }
             StringTableNames = StringTableNames.substring(0, StringTableNames.length() - 1);
+            System.out.println("created string in table " + tableName1 + " ----------------------------------");
             System.out.println("tableNames " + StringTableNames);
 
             // create string of column values
@@ -85,14 +104,16 @@ public class DataBaseManager {
             }
             StringTableValue = StringTableValue.substring(0, StringTableValue.length() - 1);// deleting excess comma
             System.out.println("tableValue " + StringTableValue);
+            System.out.println("");
 
-            statement.executeUpdate("INSERT INTO " + tableName + " (" + StringTableNames + " )"
+            statement.executeUpdate("INSERT INTO " + tableName1  + " (" + StringTableNames + " )"
                     + " VALUES (" + StringTableValue + ")");
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
     private void createNewTable(String tableName) {
         Statement stmt;
         try {
@@ -100,7 +121,7 @@ public class DataBaseManager {
             String sql = "CREATE TABLE " + tableName +
                     " (ID INT PRIMARY KEY     NOT NULL," +
                     " NAME           TEXT    NOT NULL, " +
-                    " SALARY         REAL)";
+                    " SALARY         TEXT )";
             System.out.println("Table " + tableName + " created successfully");
             stmt.executeUpdate(sql);
             stmt.close();
@@ -111,7 +132,7 @@ public class DataBaseManager {
 
     }
 
-    protected DataSet[] getTableData(String tableName) {
+    public DataSet[] getTableData(String tableName) {
         try {
 
             int anInt = getSize(tableName);
@@ -157,16 +178,18 @@ public class DataBaseManager {
         return anInt;
     }
 
-    protected void selectAndPrint(String select) throws SQLException {
+    protected void selectAndPrint() {
 
         try {
             Statement statement2 = connection.createStatement();
+            String select = "SELECT * FROM " + tableName + "";
+
             ResultSet rs1 = statement2.executeQuery(select);
 
             while (rs1.next()) {
                 int id = rs1.getInt("id");
                 String name = rs1.getString("name");
-                float salary = rs1.getFloat("salary");
+                int salary = rs1.getInt("salary");
                 System.out.print(" ID = " + id);
                 System.out.print(" NAME = " + name);
                 System.out.print(" SALARY = " + salary);
@@ -227,24 +250,18 @@ public class DataBaseManager {
         return listOfTables;
     }
 
-    protected static void update(Connection connection, String update) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(update);
-        preparedStatement.setString(1, "" + 25000 + new Random().nextInt(10000));
-        preparedStatement.executeUpdate();
-        preparedStatement.close();
-    }
-
-    protected static void delete(Connection connection, String delete) throws SQLException {
+    protected static void delete(Connection connection, String delete) {
         try {
             Statement statement = connection.createStatement();
             statement.executeUpdate(delete);
+            System.out.println("deleting from table" + tableName + " have done successfully");
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    protected static void insert(Connection connection, String insert, String tableName) throws SQLException {
+    protected static void insert(Connection connection, String insert, String tableName) {
         try {
             Statement statement1 = connection.createStatement();
             statement1.executeUpdate(insert);
