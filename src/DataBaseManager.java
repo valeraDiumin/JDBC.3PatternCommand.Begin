@@ -4,9 +4,9 @@
 public interface DataBaseManager {
     void updateFromDataSet(String tableName1, DataSet updateData1, int id);
 
-    void clearTable(String tableName);
+    void clear(String tableName);
 
-    void createStringInTable(DataSet input, String tableName1);
+    void create(DataSet input, String tableName1);
 
     void createNewTable(String tableName);
 
@@ -18,5 +18,5 @@ public interface DataBaseManager {
 
     void connect(String baseName, String login, String parole);
 
-    String[] listOfAllTables();
+    String[] getTableNames();
 }

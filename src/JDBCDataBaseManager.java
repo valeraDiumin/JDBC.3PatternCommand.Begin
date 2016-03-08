@@ -41,7 +41,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public void clearTable(String tableName){
+    public void clear(String tableName){
         try {
             Statement statement = connection.createStatement();
             String clear = "DELETE FROM " + tableName + " WHERE id < 100;";
@@ -52,16 +52,17 @@ public class JDBCDataBaseManager implements DataBaseManager {
             e.printStackTrace();
         }
     }
+
     @Override
-    public void createStringInTable(DataSet input, String tableName1){ // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!
+    public void create(DataSet input, String tableName1){ // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!
         try {
             Statement statement = connection.createStatement();
 
-            // createStringInTable string of column names
+            // create string of column names
             String format = "%s,";
             String StringTableNames = getStringFormatted(input, format);
 
-            // createStringInTable string of column values
+            // create string of column values
             String formatValue = "'%s',";
             String StringTableValue = getStringValue(input, formatValue);
 
@@ -72,6 +73,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
             e.printStackTrace();
         }
     }
+
     private String getStringValue(DataSet input, String formatValue) {
         String StringTableValue = "";
         for (Object value : input.getValues()) {
@@ -200,7 +202,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public String[] listOfAllTables() {
+    public String[] getTableNames() {
 //        Connection connection1 = manager.getConnection();
         String[] listOfTables;
         listOfTables = new String[100];
@@ -216,7 +218,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
             rs1.close();
             statement3.close();
         } catch (SQLException e) {
-            System.out.println("Exception from listOfAllTables");
+            System.out.println("Exception from getTableNames");
             e.printStackTrace();
             return new String[0];
         }

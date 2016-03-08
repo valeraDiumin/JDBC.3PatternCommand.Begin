@@ -5,7 +5,18 @@ import java.util.Arrays;
  */
 public class DataSet {
 
-static class Data {
+    public void updateFrom(DataSet newValue) {
+
+    }
+
+    public Object get(String name) { //we have to
+//        for (int i = 0; i < amountOfColumnsInIncomingString; i++) {
+//            result[i] = ColumnsInData[i].getValue();
+//        }
+        return 0;
+    }
+
+    static class Data {
     private String columnName;
     private Object value;
 
