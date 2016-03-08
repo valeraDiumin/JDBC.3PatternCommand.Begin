@@ -33,16 +33,15 @@ public class inMemoryDataBaseManager implements DataBaseManager {
 
     @Override
     public void create(DataSet input, String tableName1) {
-        tableName1 = TABLE_NAME;
         data[freeIndex] = input;
         freeIndex++;
 
     }
 
-    @Override //responsibility of this method is to work with field Data[] and do not work with DataSet newValue
+    @Override //responsibility of this method is to work with field data[] in this class and do not work with DataSet newValue
     public void updateFromDataSet(String tableName1, DataSet newValue, int id) {
         for (int index = 0; index < freeIndex; index++) { //iterate to all stored strings
-            if (data[index].get("id") == id) { // and if we have found string with the same id
+            if (Integer.parseInt(data[index].get("id").toString()) == id) { //My String!!!!!// and if we have found string with the same id
                 // (get() - method for searching data by key and give me this data)
                 data[index].updateFrom(newValue); // updating this string with "newvalue" from DataSet object newValue
             }

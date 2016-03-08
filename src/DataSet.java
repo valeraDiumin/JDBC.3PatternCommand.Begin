@@ -6,14 +6,31 @@ import java.util.Arrays;
 public class DataSet {
 
     public void updateFrom(DataSet newValue) {
-
+        for (int index = 0; index < newValue.freeIndex; index++) { //ходим по колонкам Data строки DataSet (пока новая строка не закончится)
+            Data data = newValue.data[index]; // и из новой строки извлекли колонку
+            this.put(data.columnName, data.value); // и из новой колонки извлекли имя и содержимое и вставили в текущий объект Data
+        }
     }
-
-    public Object get(String name) { //we have to
-//        for (int i = 0; i < amountOfColumnsInIncomingString; i++) {
-//            result[i] = ColumnsInData[i].getValue();
+//
+//           public interface: 3 Cycles!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :(
+//    public void updateFrom(DataSet newValue) {
+//        String[] columnNames = newValue.getColumnNames();
+//        Object[] columnValues1 = newValue.getColumnValues(); // amending
+//        for (int index = 0; index < columnNames.length; index++) { //ходим по колонкам Data строки DataSet (пока новая строка не закончится)
+//            String columnName = columnNames[index];
+//            Object columnValues = columnValues1;// amending
+//            Object columnValues = newValue.get(columnName);// Cycle*cycle version
+//            this.put(columnName, columnValues); // и из новой колонки извлекли имя и содержимое и вставили в текущий объект Data
 //        }
-        return 0;
+//    }
+
+    public Object get(String nameOfColumn) { //по имени колонки возвращаем содержимое колонки (в данной строке)
+        for (int i = 0; i < freeIndex; i++) {
+            if (data[i].getColumnName().equals(nameOfColumn)){
+                return data[i].getColumnValue();
+            }
+        }
+        return null;
     }
 
     static class Data {
@@ -30,27 +47,27 @@ public class DataSet {
         return columnName;
     }
 
-    public Object getValue() {
+    public Object getColumnValue() {
         return value;
     }
 }
-    public Data [] ColumnsInData = new Data[100];//TODO magic number 100
-    public int amountOfColumnsInIncomingString = 0;
+    public Data [] data = new Data[100];//TODO magic number 100
+    public int freeIndex = 0;
 
     public void put(String columnName, Object value) {
-        ColumnsInData[amountOfColumnsInIncomingString++] = new Data(columnName, value);
+        data[freeIndex++] = new Data(columnName, value);
     }
-    public Object[] getValues(){
-        Object[] result = new Object[amountOfColumnsInIncomingString];
-        for (int i = 0; i < amountOfColumnsInIncomingString; i++) {
-            result[i] = ColumnsInData[i].getValue();
+    public Object[] getColumnValues(){
+        Object[] result = new Object[freeIndex];
+        for (int i = 0; i < freeIndex; i++) {
+            result[i] = data[i].getColumnValue();
         }
         return result;
     }
-    public String[] getcolumnNames(){
-        String[] result = new String[amountOfColumnsInIncomingString];
-        for (int i = 0; i < amountOfColumnsInIncomingString; i++) {
-            result[i] = ColumnsInData[i].getColumnName();
+    public String[] getColumnNames(){
+        String[] result = new String[freeIndex];
+        for (int i = 0; i < freeIndex; i++) {
+            result[i] = data[i].getColumnName();
         }
         return result;
     }
@@ -58,8 +75,8 @@ public class DataSet {
     @Override
     public String toString() {
         return "DataSet{\n" +
-                "columnNames =" + Arrays.toString(getcolumnNames()) + "\n" +
-                "  getValues =" + Arrays.toString(getValues()) + "\n" +
+                "columnNames =" + Arrays.toString(getColumnNames()) + "\n" +
+                "  getColumnValues =" + Arrays.toString(getColumnValues()) + "\n" +
                 '}' + "\n";
     }
 }

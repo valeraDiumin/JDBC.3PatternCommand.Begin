@@ -33,8 +33,8 @@ public abstract class DataBaseManagerTest {
         // when create string in base
         DataSet data = new DataSet();
         data.put("id", 3);
-        data.put("NAME", "Jack Bob");
-        data.put("SALARY", "1000000");
+        data.put("name", "Jack Bob");
+        data.put("salary", "1000000");
         //put data to DataSet object
         manager.create(data, tableName1); // I have to give to method the name of table or hardcode it to method create
 
@@ -48,8 +48,8 @@ public abstract class DataBaseManagerTest {
         // and test is data same?
         DataSet user = users[0];
 
-        assertEquals("[id, name, salary]", Arrays.toString(user.getcolumnNames()));
-        assertEquals("[3, Jack Bob, 1000000]", Arrays.toString(user.getValues()));
+        assertEquals("[id, name, salary]", Arrays.toString(user.getColumnNames()));
+        assertEquals("[3, Jack Bob, 1000000]", Arrays.toString(user.getColumnValues()));
 
     }
     @Test
@@ -66,15 +66,15 @@ public abstract class DataBaseManagerTest {
         // when create string in base
         DataSet updateData = new DataSet();
         updateData.put("id", 3);
-        updateData.put("NAME", "Jack Bob");
-        updateData.put("SALARY", "1000000");
+        updateData.put("name", "Jack Bob");
+        updateData.put("salary", "1000000");
         //put data to DataSet object
         manager.create(updateData, tableName1); // I have to give to method the name of table or hardcode it to method create
 
         DataSet updateData1 = new DataSet();
-//        updateData1.put("id", 3);
-        updateData1.put("NAME", "Jack");
-        updateData1.put("SALARY", "1000"); // to DataSet
+        updateData1.put("id", 3);
+        updateData1.put("name", "Jack");
+        updateData1.put("salary", "1000"); // to DataSet
 
         // begin with string in table from previous tests
         manager.updateFromDataSet(tableName1, updateData1, 3);// Directly to Postgresql base
@@ -88,7 +88,7 @@ public abstract class DataBaseManagerTest {
         // and test is data same?
         DataSet user = users[0];
 
-        assertEquals("[id, name, salary]", Arrays.toString(user.getcolumnNames()));
-        assertEquals("[3, Jack, 1000]", Arrays.toString(user.getValues()));
+        assertEquals("[id, name, salary]", Arrays.toString(user.getColumnNames()));
+        assertEquals("[3, Jack, 1000]", Arrays.toString(user.getColumnValues()));
     }
 }

@@ -16,7 +16,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
             int index = 1;
 
-            for (Object value : updateData1.getValues()) {
+            for (Object value : updateData1.getColumnValues()) {
                 preparedStatement.setObject(index, value);
                 index++;
             }
@@ -33,7 +33,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
     private String getStringFormatted(DataSet updateData1, String format) {
         String tableNames = "";
-        for(String tableNameFromDataSet : updateData1.getcolumnNames()) {
+        for(String tableNameFromDataSet : updateData1.getColumnNames()) {
             tableNames += String.format(format, tableNameFromDataSet);
         }
         tableNames = tableNames.substring(0, tableNames.length() - 1);
@@ -76,7 +76,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
     private String getStringValue(DataSet input, String formatValue) {
         String StringTableValue = "";
-        for (Object value : input.getValues()) {
+        for (Object value : input.getColumnValues()) {
             StringTableValue += String.format(formatValue, value);
         }
         StringTableValue = StringTableValue.substring(0, StringTableValue.length() - 1);// deleting excess comma
