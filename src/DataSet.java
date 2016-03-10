@@ -6,9 +6,10 @@ import java.util.Arrays;
 public class DataSet {
 
     public void updateFrom(DataSet newValue) {
+        this.freeIndex = 0;
         for (int index = 0; index < newValue.freeIndex; index++) { //ходим по колонкам Data строки DataSet (пока новая строка не закончится)
-            Data data = newValue.data[index]; // и из новой строки извлекли колонку
-            this.put(data.columnName, data.value); // и из новой колонки извлекли имя и содержимое и вставили в текущий объект Data
+            Data data1 = newValue.data[index]; // и из новой строки извлекли колонку
+            this.put(data1.columnName, data1.value); // и из новой колонки извлекли имя и содержимое и вставили в текущий объект Data
         }
     }
 //
