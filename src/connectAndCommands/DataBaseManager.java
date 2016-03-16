@@ -1,3 +1,7 @@
+package connectAndCommands;
+
+import java.sql.SQLException;
+
 /**
  * Created by 123 on 07.03.2016.
  */
@@ -14,9 +18,9 @@ public interface DataBaseManager {
 
     int getSize(String tableName);
 
-    void selectAndPrint();
-
-    void connect(String baseName, String login, String parole);
+    void connect(String baseName, String login, String parole) throws SQLException;
 
     String[] getTableNames();
+
+    void selectAndPrint(String tableName);
 }

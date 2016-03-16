@@ -1,3 +1,5 @@
+package connectAndCommands;
+
 import java.util.Arrays;
 
 /**
@@ -7,19 +9,21 @@ public class DataSet {
 
     public void updateFrom(DataSet newValue) {
         this.freeIndex = 0;
-        for (int index = 0; index < newValue.freeIndex; index++) { //ходим по колонкам Data строки DataSet (пока новая строка не закончится)
-            Data data1 = newValue.data[index]; // и из новой строки извлекли колонку
-            this.put(data1.columnName, data1.value); // и из новой колонки извлекли имя и содержимое и вставили в текущий объект Data
+        for (int index = 0; index < newValue.freeIndex; index++) { //ходим по колонкам Data строки connectAndCommands.DataSet (пока новая строка не закончится)
+            Data newData = newValue.data[index]; // и из новой строки извлекли колонку
+            this.put(newData.columnName, newData.value); // и из новой колонки извлекли имя и содержимое и вставили в текущий объект Data
         }
     }
 //
 //           public interface: 3 Cycles!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :(
-//    public void updateFrom(DataSet newValue) {
+//    public void updateFrom(connectAndCommands.DataSet newValue) {
+//        this.freeIndex = 0;
 //        String[] columnNames = newValue.getColumnNames();
 //        Object[] columnValues1 = newValue.getColumnValues(); // amending
-//        for (int index = 0; index < columnNames.length; index++) { //ходим по колонкам Data строки DataSet (пока новая строка не закончится)
+//        for (int index = 0; index < columnNames.length; index++) { //ходим по колонкам Data строки connectAndCommands.DataSet (пока новая строка не закончится)
+
 //            String columnName = columnNames[index];
-//            Object columnValues = columnValues1;// amending
+//            Object columnValues = columnValues1[index];// amending
 //            Object columnValues = newValue.get(columnName);// Cycle*cycle version
 //            this.put(columnName, columnValues); // и из новой колонки извлекли имя и содержимое и вставили в текущий объект Data
 //        }
@@ -75,7 +79,7 @@ public class DataSet {
 
     @Override
     public String toString() {
-        return "DataSet{\n" +
+        return "connectAndCommands.DataSet{\n" +
                 "columnNames =" + Arrays.toString(getColumnNames()) + "\n" +
                 "  getColumnValues =" + Arrays.toString(getColumnValues()) + "\n" +
                 '}' + "\n";

@@ -1,3 +1,5 @@
+package connectAndCommands;
+
 import java.util.Arrays;
 
 /**
@@ -5,18 +7,18 @@ import java.util.Arrays;
  */
 public class inMemoryDataBaseManager implements DataBaseManager {
 // TODO It is possible to create multitable class with some tables.
-    public static final String TABLE_NAME = "user12"; // то есть база данных заточена только под "user"
+    public static final String TABLE_NAME = "user1"; // то есть база данных заточена только под "user"
     private DataSet[] data = new DataSet[1000];//each data is object for storing one string
     private int freeIndex = 0; //return dataSetLengths amount of strings data
 
     @Override
     public DataSet[] getTableData(String tableName) {
         validateTable(tableName);
-        return Arrays.copyOf(data, freeIndex); // copy of private DataSet[]
+        return Arrays.copyOf(data, freeIndex); // copy of private connectAndCommands.DataSet[]
     }
 
     private void validateTable(String tableName) {
-        if (!tableName.equals("user12")){
+        if (!tableName.equals("user1")){
             throw new  IllegalArgumentException("Wrong name of the table (we work with " + tableName + " table" );
         }
     }
@@ -45,11 +47,11 @@ public class inMemoryDataBaseManager implements DataBaseManager {
 
     }
 
-    @Override //responsibility of this method is to work with field data[] in this class and do not work with DataSet newValue
+    @Override //responsibility of this method is to work with field data[] in this class and do not work with connectAndCommands.DataSet newValue
     public void updateFromDataSet(String tableName1, DataSet newValue, int id) {
         for (int index = 0; index < freeIndex; index++) { //iterate to all stored strings
             if (data[index].get("id") == id) { // and if we have found string with the same id
-                data[index].updateFrom(newValue); // updating this string with "newvalue" from DataSet object newValue
+                data[index].updateFrom(newValue); // updating this string with "newvalue" from connectAndCommands.DataSet object newValue
 
             }
         }
@@ -66,7 +68,7 @@ public class inMemoryDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public void selectAndPrint() {
+    public void selectAndPrint(String tableName) {
 
     }
 }

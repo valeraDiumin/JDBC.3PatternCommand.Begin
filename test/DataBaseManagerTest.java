@@ -1,6 +1,9 @@
+import connectAndCommands.DataBaseManager;
+import connectAndCommands.DataSet;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 
 import static junit.framework.TestCase.assertEquals;
@@ -15,15 +18,19 @@ public abstract class DataBaseManagerTest {
     @Before
     public void setup() {
         manager = getDataBaseManager();
-        manager.connect("postgres", "postgres", "11111111");
-        tableName1 = "user12";
+        try {
+            manager.connect("postgres", "postgres", "11111111");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        tableName1 = "user1";
 //        manager.createNewTable(tableName1);
     }
 
     @Test
     public void listOfAllTablesTest() {
         String[] listOfAllTables = manager.getTableNames();
-        assertEquals("[user12]", Arrays.toString(listOfAllTables));
+        assertEquals("[user1]", Arrays.toString(listOfAllTables));
     }
 
     @Test
@@ -36,7 +43,7 @@ public abstract class DataBaseManagerTest {
         data.put("id", 3);
         data.put("name", "Jack Bob");
         data.put("salary", "1000000");
-        //put data to DataSet object
+        //put data to connectAndCommands.DataSet object
         manager.create(data, tableName1); // I have to give to method the name of table or hardcode it to method create
 
         //give data from base and test array of data length (amount of strings in data)
@@ -64,20 +71,20 @@ public abstract class DataBaseManagerTest {
         updateData.put("id", 1);
         updateData.put("name", "Bob");
         updateData.put("salary", "10");
-        //put data to DataSet object
+        //put data to connectAndCommands.DataSet object
         manager.create(updateData, tableName1); // I have to give to method the name of table or hardcode it to method create
 
         DataSet updateData2 = new DataSet();
         updateData2.put("id", 3);
         updateData2.put("name", "Jack Bob");
         updateData2.put("salary", "1000000");
-        //put data to DataSet object
+        //put data to connectAndCommands.DataSet object
         manager.create(updateData2, tableName1); // I have to give to method the name of table or hardcode it to method create
 
         DataSet updateData1 = new DataSet();
         updateData1.put("id", 3);
         updateData1.put("name", "Jack");
-        updateData1.put("salary", "1000"); // to DataSet
+        updateData1.put("salary", "1000"); // to connectAndCommands.DataSet
 
         // begin with string in table from previous tests
         manager.updateFromDataSet(tableName1, updateData1, 3);// Directly to Postgresql base
@@ -103,14 +110,14 @@ public abstract class DataBaseManagerTest {
         updateData.put("id", 3);
         updateData.put("name", "Jack Bob");
         updateData.put("salary", "1000000");
-        //put data to DataSet object
+        //put data to connectAndCommands.DataSet object
         manager.create(updateData, tableName1); // I have to give to method the name of table or hardcode it to method create
 
         DataSet updateData1 = new DataSet();
         updateData1.put("id", 4);
         updateData1.put("name", "Jack Bob0");
         updateData1.put("salary", "1");
-        //put data to DataSet object
+        //put data to connectAndCommands.DataSet object
         manager.create(updateData1, tableName1); // I have to give to method the name of table or hardcode it to method create
 
         //give data from base and test array of data length (amount of strings in data)

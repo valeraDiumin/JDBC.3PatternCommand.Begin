@@ -1,3 +1,5 @@
+package connectAndCommands;
+
 import java.sql.*;
 import java.util.Arrays;
 
@@ -44,9 +46,9 @@ public class JDBCDataBaseManager implements DataBaseManager {
     public void clear(String tableName){
         try {
             Statement statement = connection.createStatement();
-            String clear = "DELETE FROM " + tableName + " WHERE id < 100;";
+            String clear = "DELETE FROM " + tableName + " WHERE id < 1000000;";
             statement.executeUpdate(clear);
-            System.out.println("clearing have done");
+            System.out.println("cleaning have done");
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -114,7 +116,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
             ResultSetMetaData resultSetMetaData = rs2.getMetaData();
 
             int count = 0;
-            while ( rs2.next() ) { // put to DataSet column name and insist of the table cell
+            while ( rs2.next() ) { // put to connectAndCommands.DataSet column name and insist of the table cell
                 DataSet dataSet = new DataSet();
                 result[count++] = dataSet;
                 for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {// break insist of the string to columns
@@ -151,33 +153,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public void selectAndPrint() {
-
-        try {
-            Statement statement2 = connection.createStatement();
-            String select = "SELECT * FROM " + tableName + "";
-
-            ResultSet rs1 = statement2.executeQuery(select);
-
-            while (rs1.next()) {
-                int id = rs1.getInt("id");
-                String name = rs1.getString("name");
-                int salary = rs1.getInt("salary");
-                System.out.print(" ID = " + id);
-                System.out.print(" NAME = " + name);
-                System.out.print(" SALARY = " + salary);
-                System.out.println();
-            }
-            rs1.close();
-            statement2.close();
-        } catch (Exception e) {
-            System.out.println("Exception in method selectAndPrint ");
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void connect(String baseName, String login, String parole) {
+    public void connect(String baseName, String login, String parole) throws SQLException {
         connection = null;
         try {
             Class.forName("org.postgresql.Driver");
@@ -185,15 +161,15 @@ public class JDBCDataBaseManager implements DataBaseManager {
             e.printStackTrace();
             System.out.println("Please, add JDBC Driver to the project");
         }
-        try {
+//        try {
             connection = DriverManager
                     .getConnection("jdbc:postgresql://localhost:5432/" + baseName + "",
                             login, parole);
-        } catch (SQLException e) {
-            System.out.println(String.format("Can't get connection for database:%s user:%s", baseName, login));//прикольно!!!!!!!!!!!1
-            e.printStackTrace();
-            connection = null;
-        }
+//        } catch (SQLException e) {
+//            System.out.println(String.format("Can't get connection for database:%s user:%s", baseName, login));//прикольно!!!!!!!!!!!1
+//            e.printStackTrace();
+//            connection = null;
+//        }
         System.out.println("Connecting to database...");
     }
 
@@ -223,6 +199,11 @@ public class JDBCDataBaseManager implements DataBaseManager {
             return new String[0];
         }
         return listOfTables;
+    }
+
+    @Override
+    public void selectAndPrint(String tableName) {
+
     }
 
     public static void delete(Connection connection, String delete) {
