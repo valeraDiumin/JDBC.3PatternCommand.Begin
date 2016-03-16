@@ -9,9 +9,6 @@ import connectAndCommands.inMemoryDataBaseManager;
 import java.sql.SQLException;
 import java.util.Arrays;
 
-/**
- * Created by 123 on 15.03.2016.
- */
 public class Controller {
     public static void main(String[] args) {
         JDBCDataBaseManager jdbcDataBaseManager = new JDBCDataBaseManager();
@@ -34,7 +31,12 @@ public class Controller {
                 jdbcDataBaseManager.connect(login, parole, baseName);
                 break;
             } catch (SQLException e) {
-                controller.wright("Подключение к базе данных " + baseName + " не состоялось :(");
+                String connectMassage = e.getMessage();
+                if (e.getCause() != null) {
+                    connectMassage += e.getCause().getMessage();
+                }
+                controller.wright("Подключение к базе данных " + baseName + " не состоялось :( по причине: \n" + connectMassage);
+                controller.wright("Пожалуйста, повторите попытку");
             }
         }
         controller.wright("Вы успешно подсоединились к базе данных " + baseName + " !");
@@ -80,10 +82,11 @@ public class Controller {
         if (read.equals("Y")) {
             DataSet[] dataSet1 = jdbcDataBaseManager.getTableData(tableName);
 
-            for (int strings = 0; strings < dataSet1.length; strings++) {//проходим по всем строкам
+            for (DataSet aDataSet1 : dataSet1) {//проходим по всем строкам
 
-                System.out.println(Arrays.toString(dataSet1[strings].getColumnNames()));
-                System.out.println(Arrays.toString(dataSet1[strings].getColumnValues()));
+
+                System.out.println(Arrays.toString(aDataSet1.getColumnNames()));
+                System.out.println(Arrays.toString(aDataSet1.getColumnValues()));
                 System.out.println("");
 
             }
