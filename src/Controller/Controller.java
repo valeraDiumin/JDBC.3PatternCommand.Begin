@@ -3,7 +3,7 @@ package Controller;
 import View.Viewshka;
 import connectAndCommands.DataBaseManager;
 import connectAndCommands.DataSet;
-import java.sql.SQLException;
+
 import java.util.Arrays;
 
 public class Controller {
@@ -19,7 +19,7 @@ public class Controller {
         this.controller = controller;
     }
 
-    public void run(){
+    public void run() {
         connectToDataBase();
         this.tableName = getTableName();
         changingTable(tableName);
@@ -87,25 +87,34 @@ public class Controller {
         //connection block
         String baseName;
         while (true) {
+            try {
             controller.wright("Пожалуйста, введите логин, пароль и имя базы в формате логин|пароль|база ");
             String s = controller.read();
             String[] strings = s.split("\\|");
-            String login = strings[0];
-            String parole = strings[1];
-            baseName = strings[2];
-            try {
-                jdbcDataBaseManager.connect(login, parole, baseName);
-                break;
-            } catch (SQLException e) {
-                String connectMassage = e.getMessage();
-                if (e.getCause() != null) {
-                    connectMassage += e.getCause().getMessage();
-                }
-                controller.wright("Подключение к базе данных " + baseName + " не состоялось :( по причине: \n" + connectMassage);
-                controller.wright("Пожалуйста, повторите попытку");
+            if (strings.length != 3) {
+                throw new IllegalArgumentException("Неверное количество параметров, разделенных '|' , необходимо 3, а введено: " + strings.length);
             }
-        }
+                String login = strings[0];
+                String parole = strings[1];
+                baseName = strings[2];
+
+                    jdbcDataBaseManager.connect(login, parole, baseName);
+                    break;
+                } catch (Exception e) {
+                    printError(e);
+                }
+            }
+
         controller.wright("Вы успешно подсоединились к базе данных " + baseName + " !");
+    }
+
+    private void printError(Exception e) {
+        String connectMassage = e.getMessage();
+        if (e.getCause() != null) {
+            connectMassage += e.getCause().getMessage();
+        }
+        controller.wright("Неудача по причине: \n" + connectMassage);
+        controller.wright("Пожалуйста, повторите попытку");
     }
 }
 

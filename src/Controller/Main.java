@@ -18,6 +18,7 @@ public class Main {
         Viewshka viewshka = new Console();
 
         Controller controller = new Controller(jdbcDataBaseManager, viewshka);
+//        Controller controller = new Controller(jdbcDataBaseManager, viewshka);
         controller.run(); // запускаем ран, и вуаля!!!
     }
 }
