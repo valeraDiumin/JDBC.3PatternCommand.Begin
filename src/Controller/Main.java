@@ -3,7 +3,6 @@ package Controller;
 import View.Console;
 import View.Viewshka;
 import connectAndCommands.DataBaseManager;
-import connectAndCommands.JDBCDataBaseManager;
 import connectAndCommands.inMemoryDataBaseManager;
 
 /**
@@ -13,12 +12,11 @@ public class Main {
 
 
     public static void main(String[] args) {// создали менеджер и вьюху, которые используем, потом Контроллер, куда их уложили в конструктор,
-        DataBaseManager jdbcDataBaseManager = new JDBCDataBaseManager();
-        DataBaseManager inMemoryDataBaseManager = new inMemoryDataBaseManager();
+//        DataBaseManager manager = new JDBCDataBaseManager();
+        DataBaseManager manager = new inMemoryDataBaseManager();
         Viewshka viewshka = new Console();
 
-        Controller controller = new Controller(jdbcDataBaseManager, viewshka);
-//        Controller controller = new Controller(jdbcDataBaseManager, viewshka);
+        Controller controller = new Controller(manager, viewshka);
         controller.run(); // запускаем ран, и вуаля!!!
     }
 }
