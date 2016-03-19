@@ -8,14 +8,12 @@ import java.util.Arrays;
 
 public class Controller {
     DataBaseManager manager;
-    DataSet dataSet;
-    Viewshka controller;
+     Viewshka controller;
     String tableName;
 
 
     public Controller(DataBaseManager manager, Viewshka controller) {
         this.manager = manager;
-        dataSet = new DataSet();
         this.controller = controller;
     }
 
@@ -90,6 +88,7 @@ public class Controller {
             String iWishToInputNewData = controller.read();
             if (iWishToInputNewData.equals("Y")) {
                 controller.wright("Пожалуйста, введите данные. Построчно введите id, имя, зарплату ");
+                DataSet dataSet = new DataSet();
                 String id = controller.read();
                 dataSet.put("id", id);
 
