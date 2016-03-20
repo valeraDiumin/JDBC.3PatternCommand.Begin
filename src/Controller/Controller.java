@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public class Controller {
     DataBaseManager manager;
-     Viewshka controller;
+    Viewshka controller;
     String tableName;
 
 
@@ -17,12 +17,12 @@ public class Controller {
         this.controller = controller;
     }
 
-    public void run() {
+    public void run() {//TODO да везде надо обвязать команду хелпом и несуществующая команда
         connectToDataBase();
         while (true) {
             while (true) {
                 controller.wright("Если вы хотите посмотреть список таблиц, введите 'list' или 'help' для помощи");
-                String read = controller.read();
+                String read = controller.read();//TODO если таблица только одна, в неё заходим
                 if (read.equals("list")) {
                     tableListOut();
                     break;
@@ -32,13 +32,14 @@ public class Controller {
                     controller.wright("Несуществующая команда!");
                 }
             }
-            this.tableName = getTableName();
+            this.tableName = selectionTable();
             changingTable(tableName);
             readAllTable(tableName);
             controller.wright("Если вы хотите закончить работу с базой, введите 'S',продолжить работу - 'Y', или 'help' для помощи");
             String read1 = controller.read();
             if (read1.equals("S")) {
-                break;
+                controller.wright("До скорой встречи!");
+                System.exit(0);
             } else if (read1.equals("help")) {
                 doHelp();
             }
@@ -64,13 +65,30 @@ public class Controller {
         controller.wright("Вы желаете посмотреть содержимое всей таблицы '" + tableName + "' ? Y/N");
         String read = controller.read();
         if (read.equals("Y")) {
-            DataSet[] dataSet1 = manager.getTableData(tableName);
-            System.out.println(Arrays.toString(dataSet1[0].getColumnNames()));
-            for (DataSet aDataSet1 : dataSet1) {//проходим по всем строкам
-                System.out.println(Arrays.toString(aDataSet1.getColumnValues()));
-            }
+
+            //создаём отдельные методы на распечатку заголовков колонок и содержимого в базах данных
+            // распечатку делаем с маской - разделителем и с линиями
+            printHead(tableName);
+            printTable(tableName);
             controller.wright("Содержимое таблицы '" + tableName + "' показано");
         }
+    }
+
+    private void printTable(String tableName) {
+        DataSet[] dataSet1 = manager.getTableData(tableName);
+        if (manager.getSize(tableName) > 0) {//То есть в таблице есть записи
+            for (DataSet aDataSet1 : dataSet1) {//проходим по всем строкам
+                aDataSet1.getColumnValues();
+                System.out.println(Arrays.toString(aDataSet1.getColumnValues()));
+            }
+        }
+    }
+
+    private void printHead(String tableName) {
+        String tableHead = manager.getTableHead(tableName);
+        controller.wright("------------------------------------");
+        controller.wright(tableHead);
+        controller.wright("------------------------------------");
     }
 
     private void changingTable(String tableName) {
@@ -84,27 +102,33 @@ public class Controller {
                 manager.clear(tableName);
                 controller.wright(" Все строки таблицы '" + tableName + "' успешно удалены");
             }
-            controller.wright("Вы хотите ввести новые данные в таблицу '" + tableName + "' ? Y/N");//TODO цикл для ввода нескольких строк
-            String iWishToInputNewData = controller.read();
-            if (iWishToInputNewData.equals("Y")) {
-                controller.wright("Пожалуйста, введите данные. Построчно введите id, имя, зарплату ");
-                DataSet dataSet = new DataSet();
-                String id = controller.read();
-                dataSet.put("id", id);
+            while (true) {
+                controller.wright("Вы хотите ввести новые данные в таблицу '" + tableName + "' ? Y/N");//TODO цикл для ввода нескольких строк
+                String read2 = controller.read();
+                if (read2.equals("Y")) {
+                    controller.wright("Пожалуйста, введите данные. Построчно введите id, имя, зарплату ");
+                    DataSet dataSet = new DataSet();
+                    String id = controller.read();
+                    dataSet.put("id", id);
 
-                String name = controller.read();
-                dataSet.put("name", name);
+                    String name = controller.read();
+                    dataSet.put("name", name);
 
-                String salary = controller.read();
-                dataSet.put("salary", salary);
+                    String salary = controller.read();
+                    dataSet.put("salary", salary);
 
-                manager.create(dataSet, tableName);
-                controller.wright("Строка данных успешно добавлена в таблицу '" + tableName + "' !");
+                    manager.create(dataSet, tableName);
+                    controller.wright("Строка данных успешно добавлена в таблицу '" + tableName + "' !");
+                } else if (read2.equals("N")) {
+                    break;
+                } else {
+                    controller.wright("Неправильная команда");
+                }
             }
         }
     }
 
-    private String getTableName() {
+    private String selectionTable() {
         controller.wright("С какой таблицей Вы желаете работать? Пожалуйста, введите название таблицы");
         String tableName = controller.read();//TODO если выбрана несуществующая таблица, надо это указать и предложить опять
         controller.wright("Таблица '" + tableName + "' выбрана для работы");
@@ -131,14 +155,14 @@ public class Controller {
                 manager.connect(login, parole, baseName);
                 break;
             } catch (Exception e) {
-                printError(e);
+                connectError(e);
             }
         }
 
         controller.wright("Вы успешно подсоединились к базе данных " + baseName + " !");
     }
 
-    private void printError(Exception e) {
+    private void connectError(Exception e) {
         String connectMassage =
                 e.getClass().getSimpleName() + " : " +
                         e.getMessage(); // инфа полезная разработчику, но не юзеру!

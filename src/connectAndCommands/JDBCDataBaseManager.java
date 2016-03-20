@@ -33,7 +33,8 @@ public class JDBCDataBaseManager implements DataBaseManager {
         }
     }
 
-    private String getStringFormatted(DataSet updateData1, String format) {
+    @Override
+    public String getStringFormatted(DataSet updateData1, String format) {
         String tableNames = "";
         for(String tableNameFromDataSet : updateData1.getColumnNames()) {
             tableNames += String.format(format, tableNameFromDataSet);
@@ -76,7 +77,8 @@ public class JDBCDataBaseManager implements DataBaseManager {
         }
     }
 
-    private String getStringValue(DataSet input, String formatValue) {
+    @Override
+    public String getStringValue(DataSet input, String formatValue) {
         String StringTableValue = "";
         for (Object value : input.getColumnValues()) {
             StringTableValue += String.format(formatValue, value);
@@ -204,6 +206,16 @@ public class JDBCDataBaseManager implements DataBaseManager {
     @Override
     public void selectAndPrint(String tableName) {
 
+    }
+
+    @Override
+    public String getTableHead(String tableName) {
+        return null;
+    }
+
+    @Override
+    public String getTableValue(String tableName) {
+        return null;
     }
 
     public static void delete(Connection connection, String delete) {

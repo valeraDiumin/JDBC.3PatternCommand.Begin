@@ -9,4 +9,5 @@ public class inMemoryDataBaseManagerTest extends DataBaseManagerTest {
     protected DataBaseManager getDataBaseManager() {
         return new inMemoryDataBaseManager();
     }
+
 }

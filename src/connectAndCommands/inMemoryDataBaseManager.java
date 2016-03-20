@@ -47,6 +47,11 @@ public class inMemoryDataBaseManager implements DataBaseManager {
 
     }
 
+    @Override
+    public String getStringValue(DataSet input, String formatValue) {
+        return null;
+    }
+
     @Override //responsibility of this method is to work with field data[] in this class and do not work with connectAndCommands.DataSet newValue
     public void updateFromDataSet(String tableName1, DataSet newValue, int id) {
         for (int index = 0; index < freeIndex; index++) { //iterate to all stored strings
@@ -56,6 +61,8 @@ public class inMemoryDataBaseManager implements DataBaseManager {
             }
         }
     }
+
+
 
     @Override
     public int getSize(String tableName) {
@@ -70,5 +77,44 @@ public class inMemoryDataBaseManager implements DataBaseManager {
     @Override
     public void selectAndPrint(String tableName) {
 
+    }
+
+    @Override
+    public String getTableHead(String tableName) {
+//        String[] tableNames = getTableData(tableName)[0].getColumnNames();
+
+                String format = "%s | ";
+
+
+            String result1 = getStringFormatted(getTableData(tableName)[0], format);
+//        String result = "";
+//        for (String tableNameArray : tableNames) {
+//            result += " " + tableNameArray + " |";
+//        }
+        return result1;
+    }
+    @Override
+    public String getTableValue(String tableName) {
+//        for (Object tableValues : getTableData(tableName)) {
+//            DataSet dataSet =
+//            String[] tableNames = (String[]) tableValues.;
+//            String result = "";
+//            for (String tableNameArray : tableNames) {
+//                result += " " + tableNameArray + " |";
+//            }
+//        }
+//
+        return null;//result;
+    }
+    @Override
+    public String getStringFormatted(DataSet updateData1, String format) {//заходит в массив имён колонок в DataSet, проходит по ним, добавляет знак, отрезает кончик
+       //его вызов:
+
+        String tableNames = "";
+        for(String tableNameFromDataSet : updateData1.getColumnNames()) {
+            tableNames += String.format(format, tableNameFromDataSet);
+        }
+        tableNames = tableNames.substring(0, tableNames.length() - 1);
+        return tableNames;
     }
 }

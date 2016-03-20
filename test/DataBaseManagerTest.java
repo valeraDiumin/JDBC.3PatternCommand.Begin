@@ -128,4 +128,19 @@ public abstract class DataBaseManagerTest {
 
         manager.clear(tableName1);
     }
+    @Test
+    public void getTableHeadTest() {
+        manager.clear(tableName1);
+
+        // when create string in base
+        DataSet updateData = new DataSet();
+        updateData.put("id", 3);
+        updateData.put("name", "Jack Bob");
+        updateData.put("salary", "1000000");
+        //put data to connectAndCommands.DataSet object
+        manager.create(updateData, tableName1);
+
+        String tableHead = manager.getTableHead(tableName1);
+        assertEquals(" id | name | salary |", tableHead);
+    }
 }
