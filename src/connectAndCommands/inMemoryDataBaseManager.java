@@ -6,7 +6,7 @@ import java.util.Arrays;
  * Created by 123 on 08.03.2016.
  */
 public class inMemoryDataBaseManager implements DataBaseManager {
-// TODO It is possible to create multitable class with some tables.
+    // TODO It is possible to create multitable class with some tables.
     public static final String TABLE_NAME = "user1"; // то есть база данных заточена только под "user"
     private DataSet[] data = new DataSet[1000];//each data is object for storing one string
     private int freeIndex = 0; //return dataSetLengths amount of strings data
@@ -18,14 +18,14 @@ public class inMemoryDataBaseManager implements DataBaseManager {
     }
 
     private void validateTable(String tableName) {
-        if (!tableName.equals("user1")){
-            throw new  IllegalArgumentException("Wrong name of the table (we work with " + tableName + " table" );
+        if (!tableName.equals("user1")) {
+            throw new IllegalArgumentException("Wrong name of the table (we work with " + tableName + " table");
         }
     }
 
     @Override
     public String[] getTableNames() {
-        return new String[] {TABLE_NAME}; // Заточена только под одну таблицу
+        return new String[]{TABLE_NAME}; // Заточена только под одну таблицу
     }
 
     @Override
@@ -37,7 +37,7 @@ public class inMemoryDataBaseManager implements DataBaseManager {
     public void clear(String tableName) {
         data = new DataSet[1000]; // записываем поверх массива пустой массив
         freeIndex = 0; // или вообще сказали, что длина массива с данными равна нулю, то есть считаем, что данных нет,
-                           // и их не запрашиваем, и поверх записываем новые
+        // и их не запрашиваем, и поверх записываем новые
     }
 
     @Override
@@ -52,7 +52,8 @@ public class inMemoryDataBaseManager implements DataBaseManager {
         return null;
     }
 
-    @Override //responsibility of this method is to work with field data[] in this class and do not work with connectAndCommands.DataSet newValue
+    @Override
+    //responsibility of this method is to work with field data[] in this class and do not work with connectAndCommands.DataSet newValue
     public void updateFromDataSet(String tableName1, DataSet newValue, int id) {
         for (int index = 0; index < freeIndex; index++) { //iterate to all stored strings
             if (data[index].get("id") == id) { // and if we have found string with the same id
@@ -63,10 +64,9 @@ public class inMemoryDataBaseManager implements DataBaseManager {
     }
 
 
-
     @Override
     public int getSize(String tableName) {
-       return freeIndex;
+        return freeIndex;
     }
 
     @Override
@@ -81,40 +81,39 @@ public class inMemoryDataBaseManager implements DataBaseManager {
 
     @Override
     public String getTableHead(String tableName) {
-//        String[] tableNames = getTableData(tableName)[0].getColumnNames();
-
-                String format = "%s | ";
-
-
-            String result1 = getStringFormatted(getTableData(tableName)[0], format);
-//        String result = "";
-//        for (String tableNameArray : tableNames) {
-//            result += " " + tableNameArray + " |";
-//        }
+        String format = "%s | ";
+        DataSet getFirstStringDataSet = getTableData(tableName)[0];
+        String result1 = getStringFormatted(getFirstStringDataSet, format);
         return result1;
     }
+
     @Override
     public String getTableValue(String tableName) {
-//        for (Object tableValues : getTableData(tableName)) {
-//            DataSet dataSet =
-//            String[] tableNames = (String[]) tableValues.;
-//            String result = "";
-//            for (String tableNameArray : tableNames) {
-//                result += " " + tableNameArray + " |";
-//            }
-//        }
-//
-        return null;//result;
+        String format = "%s | ";
+        String result1 = "";
+        for (int i = 0; i < freeIndex; i++) {
+            DataSet getNextStringDataSet = getTableData(tableName)[i];
+            result1 += getValueFormatted(getNextStringDataSet, format) + "\n";
+        }
+        result1 = result1.substring(0, result1.length() - 1);
+        return result1;
     }
+
     @Override
     public String getStringFormatted(DataSet updateData1, String format) {//заходит в массив имён колонок в DataSet, проходит по ним, добавляет знак, отрезает кончик
-       //его вызов:
-
         String tableNames = "";
-        for(String tableNameFromDataSet : updateData1.getColumnNames()) {
+        for (String tableNameFromDataSet : updateData1.getColumnNames()) {
             tableNames += String.format(format, tableNameFromDataSet);
         }
         tableNames = tableNames.substring(0, tableNames.length() - 1);
         return tableNames;
+    }
+    public String getValueFormatted(DataSet updateData1, String format) {//заходит в массив имён колонок в DataSet, проходит по ним, добавляет знак, отрезает кончик
+        String tableValue = "";
+        for (int i = 0; i < updateData1.freeIndex; i++) {
+            tableValue += String.format(format, updateData1.getColumnValues());//TODO только для строк!
+        }
+        tableValue = tableValue.substring(0, tableValue.length() - 1);
+        return tableValue;
     }
 }

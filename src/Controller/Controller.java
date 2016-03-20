@@ -34,7 +34,7 @@ public class Controller {
             }
             this.tableName = selectionTable();
             changingTable(tableName);
-            readAllTable(tableName);
+            printAllTable(tableName);
             controller.wright("Если вы хотите закончить работу с базой, введите 'S',продолжить работу - 'Y', или 'help' для помощи");
             String read1 = controller.read();
             if (read1.equals("S")) {
@@ -61,7 +61,7 @@ public class Controller {
         controller.wright(massage);
     }
 
-    private void readAllTable(String tableName) {
+    private void printAllTable(String tableName) {
         controller.wright("Вы желаете посмотреть содержимое всей таблицы '" + tableName + "' ? Y/N");
         String read = controller.read();
         if (read.equals("Y")) {
@@ -70,18 +70,13 @@ public class Controller {
             // распечатку делаем с маской - разделителем и с линиями
             printHead(tableName);
             printTable(tableName);
-            controller.wright("Содержимое таблицы '" + tableName + "' показано");
         }
     }
 
     private void printTable(String tableName) {
-        DataSet[] dataSet1 = manager.getTableData(tableName);
-        if (manager.getSize(tableName) > 0) {//То есть в таблице есть записи
-            for (DataSet aDataSet1 : dataSet1) {//проходим по всем строкам
-                aDataSet1.getColumnValues();
-                System.out.println(Arrays.toString(aDataSet1.getColumnValues()));
-            }
-        }
+        String tableValue = manager.getTableValue(tableName);
+        controller.wright(tableValue);
+        controller.wright("------------------------------------");
     }
 
     private void printHead(String tableName) {
