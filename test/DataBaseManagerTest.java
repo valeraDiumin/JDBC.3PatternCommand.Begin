@@ -35,7 +35,6 @@ public abstract class DataBaseManagerTest {
 
     @Test
     public void getTableDataTest() {
-//        give table from base and prepare it for test
         manager.clear(tableName1);
 
         // when create string in base
@@ -43,17 +42,10 @@ public abstract class DataBaseManagerTest {
         data.put("id", 3);
         data.put("name", "Jack Bob");
         data.put("salary", "1000000");
-        //put data to connectAndCommands.DataSet object
         manager.create(data, tableName1); // I have to give to method the name of table or hardcode it to method create
-
-        //give data from base and test array of data length (amount of strings in data)
         DataSet[] users = manager.getTableData(tableName1);
 
-
         assertEquals(1, users.length);
-
-        //give first string from array with definite date, created by us
-        // and test is data same?
         DataSet user = users[0];
 
         assertEquals("[id, name, salary]", Arrays.toString(user.getColumnNames()));
@@ -141,6 +133,18 @@ public abstract class DataBaseManagerTest {
         manager.create(updateData, tableName1);
 
         String tableHead = manager.getTableHead(tableName1);
-        assertEquals(" id | name | salary |", tableHead);
+        assertEquals("id | name | salary |", tableHead);
+    }
+    @Test
+    public void getTableValueTest() {
+        manager.clear(tableName1);
+        DataSet data = new DataSet();
+        data.put("id", 3);
+        data.put("name", "Jack Bob");
+        data.put("salary", "1000000");
+        manager.create(data, tableName1); // I have to give to method the name of table or hardcode it to method create
+        String tableValue = manager.getTableValue(tableName1);
+
+        assertEquals(" 3 |  Jack Bob |  1000000 |", tableValue);
     }
 }

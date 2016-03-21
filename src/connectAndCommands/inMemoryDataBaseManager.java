@@ -8,7 +8,12 @@ import java.util.Arrays;
 public class inMemoryDataBaseManager implements DataBaseManager {
     // TODO It is possible to create multitable class with some tables.
     public static final String TABLE_NAME = "user1"; // то есть база данных заточена только под "user"
-    private DataSet[] data = new DataSet[1000];//each data is object for storing one string
+    private DataSet[] data;//each data is object for storing one string
+
+    {
+        data = new DataSet[1000];
+    }
+
     private int freeIndex = 0; //return dataSetLengths amount of strings data
 
     @Override
@@ -89,7 +94,7 @@ public class inMemoryDataBaseManager implements DataBaseManager {
 
     @Override
     public String getTableValue(String tableName) {
-        String format = "%s | ";
+        String format = " %s | ";
         String result1 = "";
         for (int i = 0; i < freeIndex; i++) {
             DataSet getNextStringDataSet = getTableData(tableName)[i];

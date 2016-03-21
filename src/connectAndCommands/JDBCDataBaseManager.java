@@ -25,8 +25,6 @@ public class JDBCDataBaseManager implements DataBaseManager {
             preparedStatement.setObject(index, id);
 
             preparedStatement.executeUpdate();
-
-            System.out.println("updating have done successfully");
             preparedStatement.close();
         } catch (SQLException e){
             e.printStackTrace();
@@ -44,40 +42,6 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public void clear(String tableName){
-        try {
-            Statement statement = connection.createStatement();
-            String clear = "DELETE FROM " + tableName + " WHERE id < 1000000;";
-            statement.executeUpdate(clear);
-            System.out.println("cleaning have done");
-            statement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void create(DataSet input, String tableName1){ // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!
-        try {
-            Statement statement = connection.createStatement();
-
-            // create string of column names
-            String format = "%s,";
-            String StringTableNames = getStringFormatted(input, format);
-
-            // create string of column values
-            String formatValue = "'%s',";
-            String StringTableValue = getStringValue(input, formatValue);
-
-            statement.executeUpdate("INSERT INTO " + tableName1  + " (" + StringTableNames + " )"
-                    + " VALUES (" + StringTableValue + ")");
-            statement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
     public String getStringValue(DataSet input, String formatValue) {
         String StringTableValue = "";
         for (Object value : input.getColumnValues()) {
@@ -85,25 +49,6 @@ public class JDBCDataBaseManager implements DataBaseManager {
         }
         StringTableValue = StringTableValue.substring(0, StringTableValue.length() - 1);// deleting excess comma
         return StringTableValue;
-    }
-
-    @Override
-    public void createNewTable(String tableName) {
-        Statement stmt;
-        try {
-            stmt = connection.createStatement();
-            String sql = "CREATE TABLE " + tableName +
-                    " (ID INT PRIMARY KEY     NOT NULL," +
-                    " NAME           TEXT    NOT NULL, " +
-                    " SALARY         TEXT )";
-            System.out.println("Table " + tableName + " created successfully");
-            stmt.executeUpdate(sql);
-            stmt.close();
-        } catch ( Exception e ) {
-            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
-            System.exit(0);
-        }
-
     }
 
     @Override
@@ -137,6 +82,56 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
+    public String[] getTableNames() {
+//        Connection connection1 = manager.getConnection();
+        String[] listOfTables;
+        listOfTables = new String[100];
+        try {
+            int countOfTables = 0;
+            String selectAndPrint1 = "SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type = 'BASE TABLE'";
+            Statement statement3 = connection.createStatement();
+            ResultSet rs1 = statement3.executeQuery(selectAndPrint1);
+            while ( rs1.next() ) {
+                listOfTables[countOfTables++] = rs1.getString("table_name");
+            }
+            listOfTables = Arrays.copyOf(listOfTables, countOfTables, String[].class);//deleting zero Elements ??????????????????????????String[].class????
+            rs1.close();
+            statement3.close();
+        } catch (SQLException e) {
+            System.out.println("Exception from getTableNames");
+            e.printStackTrace();
+            return new String[0];
+        }
+        return listOfTables;
+    }
+
+    @Override
+    public String getTableValue(String tableName) {
+        String result = "";
+        String format = " %s | ";
+        DataSet[] dataset = getTableData(tableName);
+        for (int i = 0; i < dataset.length; i++) {
+            result += getStringValue(dataset[i], format) + "\n";
+        }
+        result = result.substring(0, result.length() - 1);
+        return result;
+    }
+
+    @Override
+    public void selectAndPrint(String tableName) {
+
+    }
+
+    private String getStringFormattedArray(String[] listOfColumns, String format) {
+        String tableNames = "";
+        for(String tableNameFromDataSet : listOfColumns) {
+            tableNames += String.format(format, tableNameFromDataSet);
+        }
+        tableNames = tableNames.substring(0, tableNames.length() - 1);
+        return tableNames;
+    }
+
+    @Override
     public int getSize(String tableName) {
 
         Statement statement2 = null;
@@ -164,15 +159,14 @@ public class JDBCDataBaseManager implements DataBaseManager {
             System.out.println("Please, add JDBC Driver to the project");
         }
 //        try {
-            connection = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/" + baseName + "",
-                            login, parole);
+        connection = DriverManager
+                .getConnection("jdbc:postgresql://localhost:5432/" + baseName + "",
+                        login, parole);
 //        } catch (SQLException e) {
 //            System.out.println(String.format("Can't get connection for database:%s user:%s", baseName, login));//прикольно!!!!!!!!!!!1
 //            e.printStackTrace();
 //            connection = null;
 //        }
-        System.out.println("Connecting to database...");
     }
 
     public Connection getConnection() {
@@ -180,42 +174,22 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public String[] getTableNames() {
-//        Connection connection1 = manager.getConnection();
-        String[] listOfTables;
-        listOfTables = new String[100];
+    public void createNewTable(String tableName) {
+        Statement stmt;
         try {
-            int countOfTables = 0;
-            String selectAndPrint1 = "SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type = 'BASE TABLE'";
-            Statement statement3 = connection.createStatement();
-            ResultSet rs1 = statement3.executeQuery(selectAndPrint1);
-            while ( rs1.next() ) {
-                listOfTables[countOfTables++] = rs1.getString("table_name");
-            }
-            listOfTables = Arrays.copyOf(listOfTables, countOfTables, String[].class);//deleting zero Elements ??????????????????????????String[].class????
-            rs1.close();
-            statement3.close();
-        } catch (SQLException e) {
-            System.out.println("Exception from getTableNames");
-            e.printStackTrace();
-            return new String[0];
+            stmt = connection.createStatement();
+            String sql = "CREATE TABLE " + tableName +
+                    " (ID INT PRIMARY KEY     NOT NULL," +
+                    " NAME           TEXT    NOT NULL, " +
+                    " SALARY         TEXT )";
+            System.out.println("Table " + tableName + " created successfully");
+            stmt.executeUpdate(sql);
+            stmt.close();
+        } catch ( Exception e ) {
+            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+            System.exit(0);
         }
-        return listOfTables;
-    }
 
-    @Override
-    public void selectAndPrint(String tableName) {
-
-    }
-
-    @Override
-    public String getTableHead(String tableName) {
-        return null;
-    }
-
-    @Override
-    public String getTableValue(String tableName) {
-        return null;
     }
 
     public static void delete(Connection connection, String delete) {
@@ -229,12 +203,72 @@ public class JDBCDataBaseManager implements DataBaseManager {
         }
     }
 
+    @Override
+    public String getTableHead(String tableName) {
+        String[] listOfColumns;
+        listOfColumns = new String[100];
+        try {
+            int countOfColumns = 0;
+            String selectColumnNames = "SELECT * FROM information_schema.columns WHERE table_schema = 'public' " +
+                    // причина, блин, в том, что в запросе PUBLIC было вместо public
+                    "AND TABLE_NAME = '" + tableName + "'";//и '" + tableName + "'" должно быть зажато между кавычек БЕЗ ПРОБЕЛОВ!!!
+            Statement statement3 = connection.createStatement();
+            ResultSet rs1 = statement3.executeQuery(selectColumnNames);
+            while ( rs1.next() ) {
+                listOfColumns[countOfColumns++] = rs1.getString("column_name");
+            }
+            listOfColumns = Arrays.copyOf(listOfColumns, countOfColumns, String[].class);//deleting zero Elements ??????????????????????????String[].class????
+            rs1.close();
+            statement3.close();
+        } catch (SQLException e) {
+            System.out.println("Exception from getTableHead");
+            e.printStackTrace();
+            return new String[0].toString();
+        }
+        String format = "%s | ";
+        String result1 = getStringFormattedArray(listOfColumns, format);
+        return result1;
+    }
+
     public static void insert(Connection connection, String insert, String tableName) {
         try {
             Statement statement1 = connection.createStatement();
             statement1.executeUpdate(insert);
             System.out.println("insertion to table" + tableName + " have done successfully");
             statement1.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void clear(String tableName){
+        try {
+            Statement statement = connection.createStatement();
+            String clear = "DELETE FROM " + tableName + " WHERE id < 1000000;";
+            statement.executeUpdate(clear);
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void create(DataSet input, String tableName1){ // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!
+        try {
+            Statement statement = connection.createStatement();
+
+            // create string of column names
+            String format = "%s,";
+            String StringTableNames = getStringFormatted(input, format);
+
+            // create string of column values
+            String formatValue = "'%s',";
+            String StringTableValue = getStringValue(input, formatValue);
+
+            statement.executeUpdate("INSERT INTO " + tableName1  + " (" + StringTableNames + " )"
+                    + " VALUES (" + StringTableValue + ")");
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
