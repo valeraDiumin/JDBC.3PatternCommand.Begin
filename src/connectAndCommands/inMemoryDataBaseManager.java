@@ -46,7 +46,7 @@ public class inMemoryDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public void create(DataSet input, String tableName1) {
+    public void create(DataSet input, String tableName1) {//TODO вносит всё подряд без проверки на одинаковость id
         data[freeIndex] = input;
         freeIndex++;
 
@@ -96,9 +96,9 @@ public class inMemoryDataBaseManager implements DataBaseManager {
     public String getTableValue(String tableName) {
         String format = " %s | ";
         String result1 = "";
+        DataSet[] getNextStringDataSet = getTableData(tableName);
         for (int i = 0; i < freeIndex; i++) {
-            DataSet getNextStringDataSet = getTableData(tableName)[i];
-            result1 += getValueFormatted(getNextStringDataSet, format) + "\n";
+            result1 += getValueFormatted(getNextStringDataSet[i], format) + "\n";
         }
         result1 = result1.substring(0, result1.length() - 1);
         return result1;
@@ -116,7 +116,7 @@ public class inMemoryDataBaseManager implements DataBaseManager {
     public String getValueFormatted(DataSet updateData1, String format) {//заходит в массив имён колонок в DataSet, проходит по ним, добавляет знак, отрезает кончик
         String tableValue = "";
         for (int i = 0; i < updateData1.freeIndex; i++) {
-            tableValue += String.format(format, updateData1.getColumnValues());//TODO только для строк!
+            tableValue += String.format(format, updateData1.getColumnValues()[i]);//TODO только для строк!
         }
         tableValue = tableValue.substring(0, tableValue.length() - 1);
         return tableValue;
