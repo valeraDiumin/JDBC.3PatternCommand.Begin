@@ -132,8 +132,8 @@ public abstract class DataBaseManagerTest {
         //put data to connectAndCommands.DataSet object
         manager.create(updateData, tableName1);
 
-        String tableHead = manager.getTableHead(tableName1);
-        assertEquals("|id | name | salary |", tableHead);
+        String tableHead = Arrays.toString(manager.getTableHead(tableName1));
+        assertEquals("[id, name, salary]", tableHead);
     }
     @Test
     public void getTableValueTest() {

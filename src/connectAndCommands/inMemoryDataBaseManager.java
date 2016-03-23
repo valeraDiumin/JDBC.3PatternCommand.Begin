@@ -85,12 +85,9 @@ public class inMemoryDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public String getTableHead(String tableName) {
-        String format = "%s | ";
-        DataSet getFirstStringDataSet = getTableData(tableName)[0];
-        String result1 = "|";
-        result1 += getStringFormatted(getFirstStringDataSet, format);//надо или отказаться от "|", или ввести свой getStringFormatted для вывода
-        return result1;
+    public String[] getTableHead(String tableName) {//Саша вообще захардкодил 3 колонки и возвращает в Контроллер массив строк
+        String[] strings = {"id", "name", "salary"};
+        return strings;
     }
 
     @Override

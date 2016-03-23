@@ -28,7 +28,7 @@ public interface DataBaseManager {
 
     void selectAndPrint(String tableName);
 
-    String getTableHead(String tableName);
+    String[] getTableHead(String tableName);
 
     String getTableValue(String tableName);
 }

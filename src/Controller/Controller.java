@@ -24,7 +24,7 @@ public class Controller {
                 controller.wright("Введите команду или 'help' для помощи");
                 String command = controller.read();//TODO если таблица только одна, в неё заходим сразу
                 if (command.equals("list")) { //TODO постараться стандартные условия после ввода команды вывести в метод
-                    tableListOut();
+                    controller.wright(Arrays.toString(tableListOut()));
                 } else if (command.equals("help")) {
                     doHelp();
                 } else if (command.equals("exit")) {
@@ -56,12 +56,17 @@ public class Controller {
     }
 
     private void doFind(String command) {
-        controller.wright("Список доступных таблиц:");
-        String[] tableList = tableListOut();
+//        controller.wright("Список доступных таблиц:");
+//        controller.wright(Arrays.toString(tableListOut()));
         controller.wright("Ваш выбор:");
         String[] split = command.split("\\|");
         String command1 = split[1];
         controller.wright(command1);
+        isTableNameRight(command1);
+    }
+
+    private void isTableNameRight(String command1) {
+        String[] tableList = tableListOut();
         while (true) {
             boolean isTableChoiced = false;
             for (int index = 0; index < tableList.length; index++) {
@@ -97,7 +102,6 @@ public class Controller {
 
     private String[] tableListOut() {
         String[] tableNames = manager.getTableNames();
-        String massage = Arrays.toString(tableNames);
         return tableNames;
     }
 
@@ -110,11 +114,15 @@ public class Controller {
         }
     }
 
-    private void printHeader(String tableName) { // Возможно, этот вариант лучше, чем показанный во 2 лекции: преобразование
-        // кода идёт не заходя в класс DataSet, а в DataBaseManager формируем строку отчёта (может, и распечатывать лучше там же)
-        String tableHead = manager.getTableHead(tableName);
+    private void printHeader(String tableName) {
+        String[] tableHead = manager.getTableHead(tableName);
         controller.wright("------------------------------------");
-        controller.wright(tableHead);
+        String result = "|";
+        for (int index = 0; index < tableHead.length; index++) {
+            result += tableHead[index] + "|";
+        }
+        result.substring(0, result.length() - 1);
+        controller.wright(result);
         controller.wright("------------------------------------");
     }
 

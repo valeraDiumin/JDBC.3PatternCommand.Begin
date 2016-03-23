@@ -204,7 +204,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public String getTableHead(String tableName) {
+    public String[] getTableHead(String tableName) {
         String[] listOfColumns;
         listOfColumns = new String[100];
         try {
@@ -223,12 +223,9 @@ public class JDBCDataBaseManager implements DataBaseManager {
         } catch (SQLException e) {
             System.out.println("Exception from getTableHead");
             e.printStackTrace();
-            return new String[0].toString();
+            return new String[0];
         }
-        String format = "%s | ";
-        String result1 = "|";
-        result1 += getStringFormattedArray(listOfColumns, format);
-        return result1;
+        return listOfColumns;
     }
 
     public static void insert(Connection connection, String insert, String tableName) {
