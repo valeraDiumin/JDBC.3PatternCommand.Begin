@@ -30,7 +30,7 @@ public class Controller {
                 } else if (command.equals("exit")) {
                     controller.wright("До скорой встречи!");
                     System.exit(0);
-                } else if (command.equals("find")) {
+                } else if (command.startsWith("find|")) {
                     while (true) {
                         doFind(command);
                         changingTable(tableName);
@@ -56,12 +56,13 @@ public class Controller {
     }
 
     private void doFind(String command) {
-//        String[] split = command.split("//|");
+        controller.wright("Список доступных таблиц:");
+        String[] tableList = tableListOut();
+        controller.wright("Ваш выбор:");
+        String[] split = command.split("\\|");
+        String command1 = split[1];
+        controller.wright(command1);
         while (true) {
-            controller.wright("Список доступных таблиц:");
-            String[] tableList = tableListOut();
-            controller.wright("Выберите таблицу");
-            String command1 = controller.read();
             boolean isTableChoiced = false;
             for (int index = 0; index < tableList.length; index++) {
                 if (tableList[index].equals(command1)) {
@@ -75,6 +76,10 @@ public class Controller {
             } else {
                 break;
             }
+            controller.wright("Список доступных таблиц:");
+            controller.wright(Arrays.toString(tableListOut()));
+            controller.wright("Введите название таблицы");
+            command1 = controller.read();
         }
     }
 
@@ -93,7 +98,6 @@ public class Controller {
     private String[] tableListOut() {
         String[] tableNames = manager.getTableNames();
         String massage = Arrays.toString(tableNames);
-        controller.wright(massage);
         return tableNames;
     }
 
