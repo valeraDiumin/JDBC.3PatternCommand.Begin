@@ -107,7 +107,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
     @Override
     public String getTableValue(String tableName) {
-        String result = "";
+        String result = "|";
         String format = " %s | ";
         DataSet[] dataset = getTableData(tableName);
         for (int i = 0; i < dataset.length; i++) {
@@ -226,7 +226,8 @@ public class JDBCDataBaseManager implements DataBaseManager {
             return new String[0].toString();
         }
         String format = "%s | ";
-        String result1 = getStringFormattedArray(listOfColumns, format);
+        String result1 = "|";
+        result1 += getStringFormattedArray(listOfColumns, format);
         return result1;
     }
 

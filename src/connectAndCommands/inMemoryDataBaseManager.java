@@ -88,14 +88,15 @@ public class inMemoryDataBaseManager implements DataBaseManager {
     public String getTableHead(String tableName) {
         String format = "%s | ";
         DataSet getFirstStringDataSet = getTableData(tableName)[0];
-        String result1 = getStringFormatted(getFirstStringDataSet, format);
+        String result1 = "|";
+        result1 += getStringFormatted(getFirstStringDataSet, format);//надо или отказаться от "|", или ввести свой getStringFormatted для вывода
         return result1;
     }
 
     @Override
-    public String getTableValue(String tableName) {
+    public String getTableValue(String tableName) {//надо или отказаться от "|", или ввести свой getStringFormatted для вывода
         String format = " %s | ";
-        String result1 = "";
+        String result1 = "|";
         DataSet[] getNextStringDataSet = getTableData(tableName);
         for (int i = 0; i < freeIndex; i++) {
             result1 += getValueFormatted(getNextStringDataSet[i], format) + "\n";
@@ -113,6 +114,7 @@ public class inMemoryDataBaseManager implements DataBaseManager {
         tableNames = tableNames.substring(0, tableNames.length() - 1);
         return tableNames;
     }
+
     public String getValueFormatted(DataSet updateData1, String format) {//заходит в массив имён колонок в DataSet, проходит по ним, добавляет знак, отрезает кончик
         String tableValue = "";
         for (int i = 0; i < updateData1.freeIndex; i++) {

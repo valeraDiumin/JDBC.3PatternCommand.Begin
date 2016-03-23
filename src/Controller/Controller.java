@@ -21,29 +21,60 @@ public class Controller {
         connectToDataBase();
         while (true) {
             while (true) {
-                controller.wright("Если вы хотите посмотреть список таблиц, введите 'list' или 'help' для помощи");
-                String read = controller.read();//TODO если таблица только одна, в неё заходим
-                if (read.equals("list")) {
+                controller.wright("Введите команду или 'help' для помощи");
+                String command = controller.read();//TODO если таблица только одна, в неё заходим сразу
+                if (command.equals("list")) { //TODO постараться стандартные условия после ввода команды вывести в метод
                     tableListOut();
-                    break;
-                } else if (read.equals("help")) {
+                } else if (command.equals("help")) {
                     doHelp();
+                } else if (command.equals("exit")) {
+                    controller.wright("До скорой встречи!");
+                    System.exit(0);
+                } else if (command.equals("find")) {
+                    while (true) {
+                        doFind(command);
+                        changingTable(tableName);
+                        printTable(tableName);
+                        controller.wright("Продолжить работу? Y/N или 'help' для помощи");
+                        String read1 = controller.read();
+                        if (read1.equals("N")) {
+                            controller.wright("До скорой встречи!");
+                            System.exit(0);
+                        } else if (read1.equals("help")) {
+                            doHelp();
+                        } else if (read1.equals("Y")) {
+                            break;
+                        } else {
+                            controller.wright("Несуществующая команда!");
+                        }
+                    }
                 } else {
                     controller.wright("Несуществующая команда!");
                 }
             }
-            this.tableName = selectionTable();
-            changingTable(tableName);
-            printAllTable(tableName);
-            controller.wright("Если вы хотите закончить работу с базой, введите 'S',продолжить работу - 'Y', или 'help' для помощи");
-            String read1 = controller.read();
-            if (read1.equals("S")) {
-                controller.wright("До скорой встречи!");
-                System.exit(0);
-            } else if (read1.equals("help")) {
-                doHelp();
-            }
+        }
+    }
 
+    private void doFind(String command) {
+//        String[] split = command.split("//|");
+        while (true) {
+            controller.wright("Список доступных таблиц:");
+            String[] tableList = tableListOut();
+            controller.wright("Выберите таблицу");
+            String command1 = controller.read();
+            boolean isTableChoiced = false;
+            for (int index = 0; index < tableList.length; index++) {
+                if (tableList[index].equals(command1)) {
+                    tableName = command1;
+                    isTableChoiced = true;
+                    break;
+                }
+            }
+            if (isTableChoiced == false) {
+                controller.wright("Вы неправильно ввели название таблицы");
+            } else {
+                break;
+            }
         }
     }
 
@@ -53,36 +84,40 @@ public class Controller {
         controller.wright("\t для получения списка всех таблиц");
         controller.wright("\t 'help'");
         controller.wright("\t для получения помощи");
+        controller.wright("\t 'exit'");
+        controller.wright("\t для выхода из программы");
+        controller.wright("\t 'find|columnName'");
+        controller.wright("\t для выбора нужной таблицы");
     }
 
-    private void tableListOut() {
+    private String[] tableListOut() {
         String[] tableNames = manager.getTableNames();
         String massage = Arrays.toString(tableNames);
         controller.wright(massage);
-    }
-
-    private void printAllTable(String tableName) {
-        controller.wright("Вы желаете посмотреть содержимое всей таблицы '" + tableName + "' ? Y/N");
-        String read = controller.read();
-        if (read.equals("Y")) {
-
-            //создаём отдельные методы на распечатку заголовков колонок и содержимого в базах данных
-            // распечатку делаем с маской - разделителем и с линиями
-            printHead(tableName);
-            printTable(tableName);
-        }
+        return tableNames;
     }
 
     private void printTable(String tableName) {
-        String tableValue = manager.getTableValue(tableName);
-        controller.wright(tableValue);
-        controller.wright("------------------------------------");
+        controller.wright("Вы желаете посмотреть содержимое всей таблицы '" + tableName + "' ? Y/N");
+        String read = controller.read();
+        if (read.equals("Y")) {
+            printHeader(tableName);
+            printRows(tableName);
+        }
     }
 
-    private void printHead(String tableName) {
+    private void printHeader(String tableName) { // Возможно, этот вариант лучше, чем показанный во 2 лекции: преобразование
+        // кода идёт не заходя в класс DataSet, а в DataBaseManager формируем строку отчёта (может, и распечатывать лучше там же)
         String tableHead = manager.getTableHead(tableName);
         controller.wright("------------------------------------");
         controller.wright(tableHead);
+        controller.wright("------------------------------------");
+    }
+
+    private void printRows(String tableName) {// Возможно, этот вариант лучше, чем показанный во 2 лекции: преобразование
+        // кода идёт не заходя в класс DataSet, а в DataBaseManager формируем строку отчёта (может, и распечатывать лучше там же)
+        String tableValue = manager.getTableValue(tableName);
+        controller.wright(tableValue);
         controller.wright("------------------------------------");
     }
 
@@ -121,13 +156,6 @@ public class Controller {
                 }
             }
         }
-    }
-
-    private String selectionTable() {
-        controller.wright("С какой таблицей Вы желаете работать? Пожалуйста, введите название таблицы");
-        String tableName = controller.read();//TODO если выбрана несуществующая таблица, надо это указать и предложить опять
-        controller.wright("Таблица '" + tableName + "' выбрана для работы");
-        return tableName;
     }
 
     private void connectToDataBase() {

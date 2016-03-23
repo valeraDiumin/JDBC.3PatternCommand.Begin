@@ -133,7 +133,7 @@ public abstract class DataBaseManagerTest {
         manager.create(updateData, tableName1);
 
         String tableHead = manager.getTableHead(tableName1);
-        assertEquals("id | name | salary |", tableHead);
+        assertEquals("|id | name | salary |", tableHead);
     }
     @Test
     public void getTableValueTest() {
@@ -145,6 +145,6 @@ public abstract class DataBaseManagerTest {
         manager.create(data, tableName1); // I have to give to method the name of table or hardcode it to method create
         String tableValue = manager.getTableValue(tableName1);
 
-        assertEquals(" 3 |  Jack Bob |  1000000 |", tableValue);
+        assertEquals("| 3 |  Jack Bob |  1000000 |", tableValue);
     }
 }
