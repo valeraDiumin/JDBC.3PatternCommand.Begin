@@ -14,12 +14,12 @@ public class Exit implements Command {
     }
 
     @Override
-    public boolean canProcess(String comand) {
-        return comand.equals("exit");
+    public boolean canProcess(String command) {
+        return command.equals("exit");
     }
 
     @Override
-    public void process(String comand) {
+    public void process(String command) {
         viewshka.wright("До скорой встречи!");
         System.exit(0);
     }

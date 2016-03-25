@@ -2,6 +2,7 @@ package Controller;
 
 import Comand.Command;
 import Comand.Exit;
+import Comand.Help;
 import View.Viewshka;
 import connectAndCommands.DataBaseManager;
 import connectAndCommands.DataSet;
@@ -18,7 +19,7 @@ public class Controller {
     public Controller(DataBaseManager manager, Viewshka viewshka) {
         this.manager = manager;
         this.viewshka = viewshka;
-        this.commands = new Command[]{new Exit(viewshka)};
+        this.commands = new Command[]{new Exit(viewshka), new Help(viewshka)};
     }
 
     public void run() {//TODO да везде надо обвязать команду хелпом и несуществующая команда
@@ -30,8 +31,8 @@ public class Controller {
 
                 if (command.equals("list")) { //TODO постараться стандартные условия после ввода команды вывести в метод
                     viewshka.wright(Arrays.toString(tableListOut()));
-                } else if (command.equals("help")) {
-                    doHelp();
+                } else if (commands[1].canProcess(command)) {
+                    commands[1].process(command);
                 } else if (commands[0].canProcess(command)) {
                     commands[0].process(command);
                 } else if (command.startsWith("find|")) {
@@ -39,13 +40,15 @@ public class Controller {
                         doFind(command);
                         changingTable(tableName);
                         printTable(tableName);
-                        viewshka.wright("Продолжить работу? Y/N или 'help' для помощи");
+                        viewshka.wright("Продолжить работу? Y/'exit' или 'help' для помощи");
                         String read1 = viewshka.read();
                         if (read1.equals("N")) {
                             viewshka.wright("До скорой встречи!");
                             System.exit(0);
-                        } else if (read1.equals("help")) {
-                            doHelp();
+                        } else if (commands[0].canProcess(read1)) {
+                            commands[0].process(read1);
+                        } else if (commands[1].canProcess(read1)) { // непонятно что делает после help!!!!!
+                            commands[1].process(read1);
                         } else if (read1.equals("Y")) {
                             break;
                         } else {
@@ -90,18 +93,6 @@ public class Controller {
             viewshka.wright("Введите название таблицы");
             command1 = viewshka.read();
         }
-    }
-
-    private void doHelp() {// TODO можно сделать с параметрами для распечатки вариантов команд
-        viewshka.wright("Существующие команды :");
-        viewshka.wright("\t 'list'");
-        viewshka.wright("\t для получения списка всех таблиц");
-        viewshka.wright("\t 'help'");
-        viewshka.wright("\t для получения помощи");
-        viewshka.wright("\t 'exit'");
-        viewshka.wright("\t для выхода из программы");
-        viewshka.wright("\t 'find|columnName'");
-        viewshka.wright("\t для выбора нужной таблицы");
     }
 
     private String[] tableListOut() {
