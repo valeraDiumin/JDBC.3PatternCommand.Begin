@@ -1,5 +1,7 @@
 package Controller;
 
+import Comand.Command;
+import Comand.Exit;
 import View.Viewshka;
 import connectAndCommands.DataBaseManager;
 import connectAndCommands.DataSet;
@@ -7,61 +9,63 @@ import connectAndCommands.DataSet;
 import java.util.Arrays;
 
 public class Controller {
+    private Command[] commands;
     DataBaseManager manager;
-    Viewshka controller;
+    Viewshka viewshka;
     String tableName;
 
 
-    public Controller(DataBaseManager manager, Viewshka controller) {
+    public Controller(DataBaseManager manager, Viewshka viewshka) {
         this.manager = manager;
-        this.controller = controller;
+        this.viewshka = viewshka;
+        this.commands = new Command[]{new Exit(viewshka)};
     }
 
     public void run() {//TODO да везде надо обвязать команду хелпом и несуществующая команда
         connectToDataBase();
         while (true) {
             while (true) {
-                controller.wright("Введите команду или 'help' для помощи");
-                String command = controller.read();//TODO если таблица только одна, в неё заходим сразу
+                viewshka.wright("Введите команду или 'help' для помощи");
+                String command = viewshka.read();//TODO если таблица только одна, в неё заходим сразу
+
                 if (command.equals("list")) { //TODO постараться стандартные условия после ввода команды вывести в метод
-                    controller.wright(Arrays.toString(tableListOut()));
+                    viewshka.wright(Arrays.toString(tableListOut()));
                 } else if (command.equals("help")) {
                     doHelp();
-                } else if (command.equals("exit")) {
-                    controller.wright("До скорой встречи!");
-                    System.exit(0);
+                } else if (commands[0].canProcess(command)) {
+                    commands[0].process(command);
                 } else if (command.startsWith("find|")) {
                     while (true) {
                         doFind(command);
                         changingTable(tableName);
                         printTable(tableName);
-                        controller.wright("Продолжить работу? Y/N или 'help' для помощи");
-                        String read1 = controller.read();
+                        viewshka.wright("Продолжить работу? Y/N или 'help' для помощи");
+                        String read1 = viewshka.read();
                         if (read1.equals("N")) {
-                            controller.wright("До скорой встречи!");
+                            viewshka.wright("До скорой встречи!");
                             System.exit(0);
                         } else if (read1.equals("help")) {
                             doHelp();
                         } else if (read1.equals("Y")) {
                             break;
                         } else {
-                            controller.wright("Несуществующая команда!");
+                            viewshka.wright("Несуществующая команда!");
                         }
                     }
                 } else {
-                    controller.wright("Несуществующая команда!");
+                    viewshka.wright("Несуществующая команда!");
                 }
             }
         }
     }
 
     private void doFind(String command) {
-//        controller.wright("Список доступных таблиц:");
-//        controller.wright(Arrays.toString(tableListOut()));
-        controller.wright("Ваш выбор:");
+//        viewshka.wright("Список доступных таблиц:");
+//        viewshka.wright(Arrays.toString(tableListOut()));
+        viewshka.wright("Ваш выбор:");
         String[] split = command.split("\\|");
         String command1 = split[1];
-        controller.wright(command1);
+        viewshka.wright(command1);
         isTableNameRight(command1);
     }
 
@@ -77,27 +81,27 @@ public class Controller {
                 }
             }
             if (isTableChoiced == false) {
-                controller.wright("Вы неправильно ввели название таблицы");
+                viewshka.wright("Вы неправильно ввели название таблицы");
             } else {
                 break;
             }
-            controller.wright("Список доступных таблиц:");
-            controller.wright(Arrays.toString(tableListOut()));
-            controller.wright("Введите название таблицы");
-            command1 = controller.read();
+            viewshka.wright("Список доступных таблиц:");
+            viewshka.wright(Arrays.toString(tableListOut()));
+            viewshka.wright("Введите название таблицы");
+            command1 = viewshka.read();
         }
     }
 
     private void doHelp() {// TODO можно сделать с параметрами для распечатки вариантов команд
-        controller.wright("Существующие команды :");
-        controller.wright("\t 'list'");
-        controller.wright("\t для получения списка всех таблиц");
-        controller.wright("\t 'help'");
-        controller.wright("\t для получения помощи");
-        controller.wright("\t 'exit'");
-        controller.wright("\t для выхода из программы");
-        controller.wright("\t 'find|columnName'");
-        controller.wright("\t для выбора нужной таблицы");
+        viewshka.wright("Существующие команды :");
+        viewshka.wright("\t 'list'");
+        viewshka.wright("\t для получения списка всех таблиц");
+        viewshka.wright("\t 'help'");
+        viewshka.wright("\t для получения помощи");
+        viewshka.wright("\t 'exit'");
+        viewshka.wright("\t для выхода из программы");
+        viewshka.wright("\t 'find|columnName'");
+        viewshka.wright("\t для выбора нужной таблицы");
     }
 
     private String[] tableListOut() {
@@ -106,8 +110,8 @@ public class Controller {
     }
 
     private void printTable(String tableName) {
-        controller.wright("Вы желаете посмотреть содержимое всей таблицы '" + tableName + "' ? Y/N");
-        String read = controller.read();
+        viewshka.wright("Вы желаете посмотреть содержимое всей таблицы '" + tableName + "' ? Y/N");
+        String read = viewshka.read();
         if (read.equals("Y")) {
             printHeader(tableName);
             printRows(tableName);
@@ -116,69 +120,69 @@ public class Controller {
 
     private void printHeader(String tableName) {
         String[] tableHead = manager.getTableHead(tableName);
-        controller.wright("------------------------------------");
+        viewshka.wright("------------------------------------");
         String result = "|";
         for (int index = 0; index < tableHead.length; index++) {
             result += tableHead[index] + "|";
         }
         result.substring(0, result.length() - 1);
-        controller.wright(result);
-        controller.wright("------------------------------------");
+        viewshka.wright(result);
+        viewshka.wright("------------------------------------");
     }
 
     private void printRows(String tableName) {// Возможно, этот вариант лучше, чем показанный во 2 лекции: преобразование
         // кода идёт не заходя в класс DataSet, а в DataBaseManager формируем строку отчёта (может, и распечатывать лучше там же)
         String tableValue = manager.getTableValue(tableName);
-        controller.wright(tableValue);
-        controller.wright("------------------------------------");
+        viewshka.wright(tableValue);
+        viewshka.wright("------------------------------------");
     }
 
     private void changingTable(String tableName) {
-        controller.wright("Вы желаете изменить содержание таблицы '" + tableName + "' ? Y/N");
-        String iWishToChangeTable = controller.read(); //TODO если что-то другое кроме Y/N, то поправить и предложить снова ввести.....
+        viewshka.wright("Вы желаете изменить содержание таблицы '" + tableName + "' ? Y/N");
+        String iWishToChangeTable = viewshka.read(); //TODO если что-то другое кроме Y/N, то поправить и предложить снова ввести.....
         if (iWishToChangeTable.equals("Y")) {
 
-            controller.wright(" Вы желаете очистить таблицу '" + tableName + "' перед введением новой информации? Y/N");
-            String answer3 = controller.read();
+            viewshka.wright(" Вы желаете очистить таблицу '" + tableName + "' перед введением новой информации? Y/N");
+            String answer3 = viewshka.read();
             if (answer3.equals("Y")) {
                 manager.clear(tableName);
-                controller.wright(" Все строки таблицы '" + tableName + "' успешно удалены");
+                viewshka.wright(" Все строки таблицы '" + tableName + "' успешно удалены");
             }
             while (true) {
-                controller.wright("Вы хотите ввести новые данные в таблицу '" + tableName + "' ? Y/N");//TODO цикл для ввода нескольких строк
-                String read2 = controller.read();
+                viewshka.wright("Вы хотите ввести новые данные в таблицу '" + tableName + "' ? Y/N");//TODO цикл для ввода нескольких строк
+                String read2 = viewshka.read();
                 if (read2.equals("Y")) {
-                    controller.wright("Пожалуйста, введите данные. Построчно введите id, имя, зарплату ");
+                    viewshka.wright("Пожалуйста, введите данные. Построчно введите id, имя, зарплату ");
                     DataSet dataSet = new DataSet();
-                    String id = controller.read();
+                    String id = viewshka.read();
                     dataSet.put("id", id);
 
-                    String name = controller.read();
+                    String name = viewshka.read();
                     dataSet.put("name", name);
 
-                    String salary = controller.read();
+                    String salary = viewshka.read();
                     dataSet.put("salary", salary);
 
                     manager.create(dataSet, tableName);
-                    controller.wright("Строка данных успешно добавлена в таблицу '" + tableName + "' !");
+                    viewshka.wright("Строка данных успешно добавлена в таблицу '" + tableName + "' !");
                 } else if (read2.equals("N")) {
                     break;
                 } else {
-                    controller.wright("Неправильная команда");
+                    viewshka.wright("Неправильная команда");
                 }
             }
         }
     }
 
     private void connectToDataBase() {
-        controller.wright("Юзер, привет");
+        viewshka.wright("Юзер, привет");
 
         //connection block
         String baseName;
         while (true) {
             try {
-                controller.wright("Пожалуйста, введите логин, пароль и имя базы в формате логин|пароль|база ");
-                String s = controller.read();
+                viewshka.wright("Пожалуйста, введите логин, пароль и имя базы в формате логин|пароль|база ");
+                String s = viewshka.read();
                 String[] strings = s.split("\\|");
                 if (strings.length != 3) {
                     throw new IllegalArgumentException("Неверное количество параметров, разделенных '|' , необходимо 3, а введено: " + strings.length);
@@ -194,7 +198,7 @@ public class Controller {
             }
         }
 
-        controller.wright("Вы успешно подсоединились к базе данных " + baseName + " !");
+        viewshka.wright("Вы успешно подсоединились к базе данных " + baseName + " !");
     }
 
     private void connectError(Exception e) {
@@ -206,8 +210,8 @@ public class Controller {
             connectMassage += "\n" +
                     cause.getClass().getSimpleName() + ":  " + e.getCause().getMessage();
         }
-        controller.wright("Неудача по причине: \n" + connectMassage);
-        controller.wright("Пожалуйста, повторите попытку");
+        viewshka.wright("Неудача по причине: \n" + connectMassage);
+        viewshka.wright("Пожалуйста, повторите попытку");
     }
 }
 
