@@ -3,11 +3,10 @@ package Controller;
 import Comand.Command;
 import Comand.Exit;
 import Comand.Help;
+import Comand.List;
 import View.Viewshka;
 import connectAndCommands.DataBaseManager;
 import connectAndCommands.DataSet;
-
-import java.util.Arrays;
 
 public class Controller {
     private Command[] commands;
@@ -19,7 +18,7 @@ public class Controller {
     public Controller(DataBaseManager manager, Viewshka viewshka) {
         this.manager = manager;
         this.viewshka = viewshka;
-        this.commands = new Command[]{new Exit(viewshka), new Help(viewshka)};
+        this.commands = new Command[]{new Exit(viewshka), new Help(viewshka), new List(manager, viewshka)};
     }
 
     public void run() {//TODO да везде надо обвязать команду хелпом и несуществующая команда
@@ -29,8 +28,13 @@ public class Controller {
                 viewshka.wright("Введите команду или 'help' для помощи");
                 String command = viewshka.read();//TODO если таблица только одна, в неё заходим сразу
 
-                if (command.equals("list")) { //TODO постараться стандартные условия после ввода команды вывести в метод
-                    viewshka.wright(Arrays.toString(tableListOut()));
+//                assert command != null : "Команда не должна быть пустой";
+                    if ("123".equals(command)) {
+                        throw new AssertionError("проверка");
+                    }
+
+                if (commands[2].canProcess(command)) { //TODO постараться стандартные условия после ввода команды вывести в метод
+                    commands[2].process(command);
                 } else if (commands[1].canProcess(command)) {
                     commands[1].process(command);
                 } else if (commands[0].canProcess(command)) {
@@ -47,7 +51,7 @@ public class Controller {
                             System.exit(0);
                         } else if (commands[0].canProcess(read1)) {
                             commands[0].process(read1);
-                        } else if (commands[1].canProcess(read1)) { // непонятно что делает после help!!!!!
+                        } else if (commands[1].canProcess(read1)) { // коряво делает после help!!!!!
                             commands[1].process(read1);
                         } else if (read1.equals("Y")) {
                             break;
@@ -73,7 +77,7 @@ public class Controller {
     }
 
     private void isTableNameRight(String command1) {
-        String[] tableList = tableListOut();
+        String[] tableList = manager.getTableNames();
         while (true) {
             boolean isTableChoiced = false;
             for (int index = 0; index < tableList.length; index++) {
@@ -89,16 +93,14 @@ public class Controller {
                 break;
             }
             viewshka.wright("Список доступных таблиц:");
-            viewshka.wright(Arrays.toString(tableListOut()));
+            String abc = "a"; // вложили хоть что-то, нужен какой-нибудь параметр.
+            commands[2].process(abc);
             viewshka.wright("Введите название таблицы");
             command1 = viewshka.read();
         }
     }
 
-    private String[] tableListOut() {
-        String[] tableNames = manager.getTableNames();
-        return tableNames;
-    }
+
 
     private void printTable(String tableName) {
         viewshka.wright("Вы желаете посмотреть содержимое всей таблицы '" + tableName + "' ? Y/N");

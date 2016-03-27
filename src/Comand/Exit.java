@@ -16,7 +16,7 @@ public class Exit implements Command {
     @Override
     public boolean canProcess(String command) {
         return command.equals("exit");
-    }
+    }//если команда == нулю, ексепшин не будет вызван
 
     @Override
     public void process(String command) {
