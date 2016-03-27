@@ -22,7 +22,7 @@ public interface DataBaseManager {
 
     int getSize(String tableName);
 
-    void connect(String baseName, String login, String parole) throws SQLException;
+    boolean connect(String baseName, String login, String parole) throws SQLException;
 
     String[] getTableNames();
 

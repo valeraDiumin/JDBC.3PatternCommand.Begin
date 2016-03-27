@@ -150,7 +150,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public void connect(String baseName, String login, String parole) throws SQLException {
+    public boolean connect(String baseName, String login, String parole) throws SQLException {
         connection = null;
         try {
             Class.forName("org.postgresql.Driver");
@@ -167,6 +167,11 @@ public class JDBCDataBaseManager implements DataBaseManager {
 //            e.printStackTrace();
 //            connection = null;
 //        }
+        if (connection == null){
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public Connection getConnection() {

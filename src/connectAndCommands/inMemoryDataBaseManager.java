@@ -34,8 +34,9 @@ public class inMemoryDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public void connect(String baseName, String login, String parole) {
+    public boolean connect(String baseName, String login, String parole) {
         // do nothing
+        return true;
     }
 
     @Override

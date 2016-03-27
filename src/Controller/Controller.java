@@ -14,7 +14,7 @@ public class Controller {
     public Controller(DataBaseManager manager, Viewshka viewshka) {
         this.manager = manager;
         this.viewshka = viewshka;
-        this.commands = new Command[]{new Exit(viewshka), new Help(viewshka), new List(manager, viewshka),
+        this.commands = new Command[]{new Connect(manager, Viewshka), new Exit(viewshka), new Help(viewshka), new List(manager, viewshka),
                 new Find(manager, viewshka, tableName, commands), new Unsupported(viewshka)};
     }
 
