@@ -24,7 +24,7 @@ public class List implements Command {
     }
 
     @Override
-    public void process(String command) { // у нас есть возвращаемое значение. Как его впихнуть?
+    public void process(String command) {
             String[] tableNames = manager.getTableNames();
             viewshka.wright(Arrays.toString(tableNames));
     }

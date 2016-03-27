@@ -15,26 +15,18 @@ public class Controller {
         this.manager = manager;
         this.viewshka = viewshka;
         this.commands = new Command[]{new Exit(viewshka), new Help(viewshka), new List(manager, viewshka),
-                new Find(manager, viewshka, tableName, commands)};
+                new Find(manager, viewshka, tableName, commands), new Unsupported(viewshka)};
     }
 
-    public void run() {//TODO да везде надо обвязать команду хелпом и несуществующая команда
+    public void run() {
         connectToDataBase();
         while (true) {
-            while (true) {
-                viewshka.wright("Введите команду или 'help' для помощи");
-                String command = viewshka.read();//TODO если таблица только одна, в неё заходим сразу
-
-                if (commands[2].canProcess(command)) { //TODO постараться стандартные условия после ввода команды вывести в метод
-                    commands[2].process(command);
-                } else if (commands[1].canProcess(command)) {
-                    commands[1].process(command);
-                } else if (commands[0].canProcess(command)) {
-                    commands[0].process(command);
-                } else if (commands[3].canProcess(command)) {
-                    commands[3].process(command);
-                } else {
-                    viewshka.wright("Несуществующая команда!");
+            viewshka.wright("Введите команду или 'help' для помощи");
+            String command = viewshka.read();
+            for (int index = 0; index < commands.length; index++) {
+                if (commands[index].canProcess(command)) {
+                    commands[index].process(command);
+                    break;
                 }
             }
         }

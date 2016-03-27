@@ -27,34 +27,42 @@ public class Find implements Command {
     }
 
     @Override
-    public void process(String command) {
+    public void process(String command) {// не может вызваться массив из Контроллера!
         while (true) {
-            doFind(command);
-            changingTable(tableName);
-            printTable(tableName);
-            viewshka.wright("Продолжить работу? Y/'exit' или 'help' для помощи");
-            String read1 = viewshka.read();
-            if (read1.equals("N")) {
-                viewshka.wright("До скорой встречи!");
-                System.exit(0);
-            } else if (commands[0].canProcess(read1)) {
-                commands[0].process(read1);
-            } else if (commands[1].canProcess(read1)) { // коряво делает после help!!!!!
-                commands[1].process(read1);
-            } else if (read1.equals("Y")) {
-                break;
+            if (doFind(command) == true) {
+                changingTable(tableName);
+                printTable(tableName);
+                viewshka.wright("Продолжить работу? Y/'exit' или 'help' для помощи");
+                String read1 = viewshka.read();
+                if (read1.equals("exit")) {
+                    viewshka.wright("До скорой встречи!");
+                    System.exit(0);
+                } else if (read1.equals("Y")) {
+                    break;
+                } else {
+                    viewshka.wright("Несуществующая команда!");
+                }
             } else {
-                viewshka.wright("Несуществующая команда!");
+                break;
             }
+
         }
     }
-    private void doFind(String command) {
+
+    private boolean doFind(String command) {
         viewshka.wright("Ваш выбор:");
         String[] split = command.split("\\|");
-        String command1 = split[1];
-        viewshka.wright(command1);
-        isTableNameRight(command1);
+        if (split.length <= 1) {
+            viewshka.wright("Не выбрана таблица");
+            return false;
+        } else {
+            String command1 = split[1];
+            viewshka.wright(command1);
+            isTableNameRight(command1);
+            return true;
+        }
     }
+
     private void isTableNameRight(String command1) {
         String[] tableList = manager.getTableNames();
         while (true) {
@@ -71,13 +79,11 @@ public class Find implements Command {
             } else {
                 break;
             }
-            viewshka.wright("Список доступных таблиц:");
-            String abc = "a"; // вложили хоть что-то, нужен какой-нибудь параметр.
-            commands[2].process(abc);
             viewshka.wright("Введите название таблицы");
             command1 = viewshka.read();
         }
     }
+
     private void printTable(String tableName) {
         viewshka.wright("Вы желаете посмотреть содержимое всей таблицы '" + tableName + "' ? Y/N");
         String read = viewshka.read();
@@ -86,6 +92,7 @@ public class Find implements Command {
             printRows(tableName);
         }
     }
+
     private void printHeader(String tableName) {
         String[] tableHead = manager.getTableHead(tableName);
         viewshka.wright("------------------------------------");
@@ -104,6 +111,7 @@ public class Find implements Command {
         viewshka.wright(tableValue);
         viewshka.wright("------------------------------------");
     }
+
     private void changingTable(String tableName) {
         viewshka.wright("Вы желаете изменить содержание таблицы '" + tableName + "' ? Y/N");
         String iWishToChangeTable = viewshka.read(); //TODO если что-то другое кроме Y/N, то поправить и предложить снова ввести.....
