@@ -6,6 +6,8 @@ import java.sql.SQLException;
  * Created by 123 on 07.03.2016.
  */
 public interface DataBaseManager {
+    boolean isConnect();
+
     void updateFromDataSet(String tableName1, DataSet updateData1, int id);
 
     String getStringFormatted(DataSet updateData1, String format);
@@ -22,7 +24,7 @@ public interface DataBaseManager {
 
     int getSize(String tableName);
 
-    boolean connect(String baseName, String login, String parole) throws SQLException;
+    void connect(String baseName, String login, String parole) throws SQLException;
 
     String[] getTableNames();
 

@@ -6,6 +6,11 @@ import java.util.Arrays;
 public class JDBCDataBaseManager implements DataBaseManager {
     private static String tableName;
     public Connection connection;
+    private boolean isConnect;
+
+    public JDBCDataBaseManager() {
+        this.isConnect = false;
+    }
 
     @Override
     public void updateFromDataSet(String tableName1, DataSet updateData1, int id) {
@@ -150,7 +155,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public boolean connect(String baseName, String login, String parole) throws SQLException {
+    public void connect(String baseName, String login, String parole) throws SQLException {
         connection = null;
         try {
             Class.forName("org.postgresql.Driver");
@@ -168,10 +173,14 @@ public class JDBCDataBaseManager implements DataBaseManager {
 //            connection = null;
 //        }
         if (connection == null){
-            return false;
+            isConnect = false;
         } else {
-            return true;
+            isConnect = true;
         }
+    }
+
+    public boolean isConnect() {
+        return isConnect;
     }
 
     public Connection getConnection() {
