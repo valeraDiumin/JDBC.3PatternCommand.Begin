@@ -14,10 +14,10 @@ public class Controller {
         this.manager = manager;
         this.viewshka = viewshka;
         this.commands = new Command[]{
-                new Help(viewshka),
                 new Connect(manager, viewshka),
-                new IsConnected(manager),
+                new Help(viewshka),
                 new Exit(viewshka),
+                new IsConnected(manager, viewshka),// глотает команды, так как принимает любую команду, и через брейк в начало цикла до себя же
                 new List(manager, viewshka),
                 new Find(manager, viewshka, tableName, commands),
                 new Unsupported(viewshka)

@@ -15,12 +15,12 @@ public class Connect implements Command {
 
         this.manager = manager;
         this.viewshka = viewshka;
-        this.isConnected = new IsConnected(manager);
+        this.isConnected = new IsConnected(manager, viewshka);
     }
 
     @Override
     public boolean canProcess(String command) {
-        return !isConnected.canProcess(command);
+        return command.startsWith("connect|");
     }
 
     @Override

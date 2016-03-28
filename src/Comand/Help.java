@@ -5,7 +5,7 @@ import View.Viewshka;
 /**
  * Created by 123 on 25.03.2016.
  */
-public class Help implements Command{
+public class Help implements Command {
     private Viewshka viewshka;
 
     public Help(Viewshka viewshka) {
@@ -21,6 +21,8 @@ public class Help implements Command{
     @Override
     public void process(String command) {
         viewshka.wright("Существующие команды :");
+        viewshka.wright("\t 'connect|'");
+        viewshka.wright("\t для начала процедуры подключения к базе данных");
         viewshka.wright("\t 'list'");
         viewshka.wright("\t для получения списка всех таблиц");
         viewshka.wright("\t 'help'");

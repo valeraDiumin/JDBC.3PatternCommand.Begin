@@ -32,7 +32,7 @@ public class Find implements Command {
             if (doFind(command) == true) {
                 changingTable(tableName);
                 printTable(tableName);
-                viewshka.wright("Продолжить работу? Y/'exit' или 'help' для помощи");
+                viewshka.wright("Продолжить работу? Y/'exit'");
                 String read1 = viewshka.read();
                 if (read1.equals("exit")) {
                     viewshka.wright("До скорой встречи!");

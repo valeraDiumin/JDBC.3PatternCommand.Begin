@@ -6,11 +6,6 @@ import java.util.Arrays;
 public class JDBCDataBaseManager implements DataBaseManager {
     private static String tableName;
     public Connection connection;
-    private boolean isConnect;
-
-    public JDBCDataBaseManager() {
-        this.isConnect = false;
-    }
 
     @Override
     public void updateFromDataSet(String tableName1, DataSet updateData1, int id) {
@@ -172,15 +167,10 @@ public class JDBCDataBaseManager implements DataBaseManager {
 //            e.printStackTrace();
 //            connection = null;
 //        }
-        if (connection == null){
-            isConnect = false;
-        } else {
-            isConnect = true;
-        }
     }
 
     public boolean isConnect() {
-        return isConnect;
+        return connection != null;
     }
 
     public Connection getConnection() {

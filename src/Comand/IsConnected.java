@@ -1,5 +1,6 @@
 package Comand;
 
+import View.Viewshka;
 import connectAndCommands.DataBaseManager;
 
 /**
@@ -7,19 +8,21 @@ import connectAndCommands.DataBaseManager;
  */
 public class IsConnected implements Command {
     private DataBaseManager dataBaseManager;
+    private Viewshka viewshka;
 
-    public IsConnected(DataBaseManager dataBaseManager) {
+    public IsConnected(DataBaseManager dataBaseManager, Viewshka viewshka) {
 
         this.dataBaseManager = dataBaseManager;
+        this.viewshka = viewshka;
     }
 
     @Override
     public boolean canProcess(String command) {
-        return true;
+        return !dataBaseManager.isConnect();
     }
 
     @Override
     public void process(String command) {
-        dataBaseManager.isConnect();
+        viewshka.wright("Вы не можете пользоваться базой, пока не подсоединились к ней. \n Введите conect| для начала процедуры подключения");
     }
 }

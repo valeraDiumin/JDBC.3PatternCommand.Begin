@@ -6,7 +6,7 @@ import View.Viewshka;
  * Created by 123 on 25.03.2016.
  */
 public class Exit implements Command {
-    Viewshka viewshka;
+    private Viewshka viewshka;
 
     public Exit(Viewshka viewshka) {
 
