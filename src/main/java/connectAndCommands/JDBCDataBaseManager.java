@@ -13,7 +13,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
             String format = "%s = ?,";
             String tableNames = getStringFormatted(updateData1, format);
 
-            String update = "UPDATE " + tableName1 + "SET " + tableNames + "WHERE id = ?";
+            String update = " UPDATE " + tableName1 + " SET " + tableNames + " WHERE id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(update);
 
             int index = 1;
@@ -110,8 +110,8 @@ public class JDBCDataBaseManager implements DataBaseManager {
         String result = "|";
         String format = " %s | ";
         DataSet[] dataset = getTableData(tableName);
-        for (int i = 0; i < dataset.length; i++) {
-            result += getStringValue(dataset[i], format) + "\n";
+        for (DataSet aDataset : dataset) {
+            result += getStringValue(aDataset, format) + "\n";
         }
         result = result.substring(0, result.length() - 1);
         return result;

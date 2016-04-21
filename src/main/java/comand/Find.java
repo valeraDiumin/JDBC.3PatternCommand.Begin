@@ -64,19 +64,19 @@ public class Find implements Command {
         String[] tableList = manager.getTableNames();
         while (true) {
             boolean isTableChoiced = false;
-            for (int index = 0; index < tableList.length; index++) {
-                if (tableList[index].equals(command1)) {
+            for (String aTableList : tableList) {
+                if (aTableList.equals(command1)) {
                     tableName = command1;
                     isTableChoiced = true;
                     break;
                 }
             }
             if (!isTableChoiced) {
-                viewshka.wright("Вы неправильно ввели название таблицы");
+                viewshka.wright(String.format("Вы ввели название несуществующей таблицы '%s'", tableName));
             } else {
                 break;
             }
-            viewshka.wright("Введите название таблицы");
+            viewshka.wright("Пожалуйста, введите название существующей таблицы");
             command1 = viewshka.read();
         }
     }
@@ -94,8 +94,8 @@ public class Find implements Command {
         String[] tableHead = manager.getTableHead(tableName);
         viewshka.wright("------------------------------------");
         String result = "|";
-        for (int index = 0; index < tableHead.length; index++) {
-            result += tableHead[index] + "|";
+        for (String aTableHead : tableHead) {
+            result += aTableHead + "|";
         }
         result.substring(0, result.length() - 1);
         viewshka.wright(result);

@@ -25,10 +25,10 @@ public class Controller {
     public void run() {
         greeting(viewshka);
         do {
-            String command = viewshka.read();
-            for (int index = 0; index < commands.length; index++) {
-                if (commands[index].canProcess(command)) {
-                    commands[index].process(command);
+            String command = viewshka.read(); //У Саши if close application (3л - 3 ч 08 мин) NullPointerException
+            for (Command command1 : commands) {//
+                if (command1.canProcess(command)) {
+                    command1.process(command);
                     break;
                 }
             }

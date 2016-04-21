@@ -4,6 +4,7 @@ import view.Viewshka;
 import connectAndCommands.DataBaseManager;
 
 public class Connect implements Command {
+    private static final String COMMAND_SAMPLE = "connect|postgres|postgres|11111111";
     private DataBaseManager manager;
     private Viewshka viewshka;
     private IsConnected isConnected;
@@ -25,9 +26,9 @@ public class Connect implements Command {
             try {
 
                 String[] strings = command.split("\\|");
-                if (strings.length != 4) {//TODO magic numbers
-                    throw new IllegalArgumentException("Неверное количество параметров, разделенных '|' , " +
-                            "необходимо 4, а введено: " + strings.length);
+                if (strings.length != parametersLength()) {
+                    throw new IllegalArgumentException(String.format("Неверное количество параметров, разделенных '|' , " +
+                            "необходимо %s, а введено: %s", parametersLength(), strings.length));
                 }
 
                 String login = strings[1];
@@ -41,6 +42,10 @@ public class Connect implements Command {
                 connectError(e);
             }
         }
+
+    private int parametersLength() {
+        return COMMAND_SAMPLE.split("\\|").length;
+    }
 
     private void connectError(Throwable e) {
         String connectMassage =
