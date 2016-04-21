@@ -39,9 +39,9 @@ public abstract class DataBaseManagerTest {
 
         // when create string in base
         DataSet data = new DataSet();
-        data.put("id", 3);
-        data.put("name", "Jack Bob");
-        data.put("salary", "1000000");
+        data.putNewString("id", 3);
+        data.putNewString("name", "Jack Bob");
+        data.putNewString("salary", "1000000");
         manager.create(data, tableName1); // I have to give to method the name of table or hardcode it to method create
         DataSet[] users = manager.getTableData(tableName1);
 
@@ -60,23 +60,23 @@ public abstract class DataBaseManagerTest {
 
         // when create string in base
         DataSet updateData = new DataSet();
-        updateData.put("id", 1);
-        updateData.put("name", "Bob");
-        updateData.put("salary", "10");
-        //put data to connectAndCommands.DataSet object
+        updateData.putNewString("id", 1);
+        updateData.putNewString("name", "Bob");
+        updateData.putNewString("salary", "10");
+        //putNewString data to connectAndCommands.DataSet object
         manager.create(updateData, tableName1); // I have to give to method the name of table or hardcode it to method create
 
         DataSet updateData2 = new DataSet();
-        updateData2.put("id", 3);
-        updateData2.put("name", "Jack Bob");
-        updateData2.put("salary", "1000000");
-        //put data to connectAndCommands.DataSet object
+        updateData2.putNewString("id", 3);
+        updateData2.putNewString("name", "Jack Bob");
+        updateData2.putNewString("salary", "1000000");
+        //putNewString data to connectAndCommands.DataSet object
         manager.create(updateData2, tableName1); // I have to give to method the name of table or hardcode it to method create
 
         DataSet updateData1 = new DataSet();
-        updateData1.put("id", 3);
-        updateData1.put("name", "Jack");
-        updateData1.put("salary", "1000"); // to connectAndCommands.DataSet
+        updateData1.putNewString("id", 3);
+        updateData1.putNewString("name", "Jack");
+        updateData1.putNewString("salary", "1000"); // to connectAndCommands.DataSet
 
         // begin with string in table from previous tests
         manager.updateFromDataSet(tableName1, updateData1, 3);// Directly to Postgresql base
@@ -99,17 +99,17 @@ public abstract class DataBaseManagerTest {
 
         // when create string in base
         DataSet updateData = new DataSet();
-        updateData.put("id", 3);
-        updateData.put("name", "Jack Bob");
-        updateData.put("salary", "1000000");
-        //put data to connectAndCommands.DataSet object
+        updateData.putNewString("id", 3);
+        updateData.putNewString("name", "Jack Bob");
+        updateData.putNewString("salary", "1000000");
+        //putNewString data to connectAndCommands.DataSet object
         manager.create(updateData, tableName1); // I have to give to method the name of table or hardcode it to method create
 
         DataSet updateData1 = new DataSet();
-        updateData1.put("id", 4);
-        updateData1.put("name", "Jack Bob0");
-        updateData1.put("salary", "1");
-        //put data to connectAndCommands.DataSet object
+        updateData1.putNewString("id", 4);
+        updateData1.putNewString("name", "Jack Bob0");
+        updateData1.putNewString("salary", "1");
+        //putNewString data to connectAndCommands.DataSet object
         manager.create(updateData1, tableName1); // I have to give to method the name of table or hardcode it to method create
 
         //give data from base and test array of data length (amount of strings in data)
@@ -126,10 +126,10 @@ public abstract class DataBaseManagerTest {
 
         // when create string in base
         DataSet updateData = new DataSet();
-        updateData.put("id", 3);
-        updateData.put("name", "Jack Bob");
-        updateData.put("salary", "1000000");
-        //put data to connectAndCommands.DataSet object
+        updateData.putNewString("id", 3);
+        updateData.putNewString("name", "Jack Bob");
+        updateData.putNewString("salary", "1000000");
+        //putNewString data to connectAndCommands.DataSet object
         manager.create(updateData, tableName1);
 
         String tableHead = Arrays.toString(manager.getTableHead(tableName1));
@@ -139,9 +139,9 @@ public abstract class DataBaseManagerTest {
     public void getTableValueTest() {
         manager.clear(tableName1);
         DataSet data = new DataSet();
-        data.put("id", 3);
-        data.put("name", "Jack Bob");
-        data.put("salary", "1000000");
+        data.putNewString("id", 3);
+        data.putNewString("name", "Jack Bob");
+        data.putNewString("salary", "1000000");
         manager.create(data, tableName1); // I have to give to method the name of table or hardcode it to method create
         String tableValue = manager.getTableValue(tableName1);
 
