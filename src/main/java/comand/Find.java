@@ -25,7 +25,6 @@ public class Find implements Command {
 
     @Override
     public void process(String command) {// не может вызваться массив из Контроллера!
-        while (true) {
             if (doFind(command)) {
                 changingTable(tableName);
                 printTable(tableName);
@@ -33,15 +32,12 @@ public class Find implements Command {
                 String read1 = viewshka.read();
                 if (read1.equals("exit")) {
                     viewshka.wright("До скорой встречи!");
-                    System.exit(0);
+                    throw new ExitException();
                 } else if (read1.equals("Y")) {
-                    break;
+                    //TODO и как мы повторим работу с выбранной таблицей?
                 } else {
                     viewshka.wright("Несуществующая команда!");
                 }
-            } else {
-                break;
-            }
 
         }
     }
@@ -50,7 +46,7 @@ public class Find implements Command {
         viewshka.wright("Выбрана таблица:");
         String[] split = command.split("\\|");
         if (split.length <= 1) {
-            viewshka.wright("Не выбрана таблица");
+            viewshka.wright("Таблица не выбрана");
             return false;
         } else {
             String command1 = split[1];
@@ -72,7 +68,7 @@ public class Find implements Command {
                 }
             }
             if (!isTableChoiced) {
-                viewshka.wright(String.format("Вы ввели название несуществующей таблицы '%s'", tableName));
+                viewshka.wright("Вы ввели название несуществующей таблицы");//(String.format("Вы ввели название несуществующей таблицы '%s'", tableName));
             } else {
                 break;
             }
