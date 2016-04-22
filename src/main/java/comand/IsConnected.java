@@ -20,9 +20,9 @@ public class IsConnected implements Command {
 
     @Override
     public void process(String command) {
-        viewshka.wright("Вы не можете пользоваться базой, пока не подсоединились к ней. \n \n" +
+        viewshka.wright(String.format("Вы не можете пользоваться командой '%s', пока не подсоединились к базе. \n" +
                 "Введите команду 'connect|' для начала процедуры соединения с базой, \n " +
                 " 'exit' для выхода из программы \n" +
-                "   или 'help' для помощи");
+                "   или 'help' для помощи", command));
     }
 }
