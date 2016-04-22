@@ -23,9 +23,20 @@ public class Controller {
     }
 
     public void run() {
+        try {
+            doWork();
+        } catch (ExitException e) {
+            //do nothing
+        }
+    }
+
+    protected void doWork() {
         greeting(viewshka);
         do {
-            String command = viewshka.read(); //У Саши if close application (3л - 3 ч 08 мин) NullPointerException
+            String command = viewshka.read();
+            if (command == null) {
+                new Exit(viewshka).process("");
+            }
             for (Command command1 : commands) {//
                 if (command1.canProcess(command)) {
                     command1.process(command);
