@@ -104,7 +104,7 @@ public class IntegrationTest {
                 "До скорой встречи!\r\n", getData());
     }
     @Test
-    public void TestConnectUnsupported() {
+    public void TestUnsupportedAfterConnect() {
         //given
         in.add("connect|postgres|postgres|11111111");
         in.add("Unsupported");
@@ -119,9 +119,8 @@ public class IntegrationTest {
                 "Несуществующая команда!\r\n" +
                 "До скорой встречи!\r\n", getData());
     }
-
     @Test
-    public void TestConnectHelp() {
+    public void TestHelpAfterConnect() {
         //given
         in.add("connect|postgres|postgres|11111111");
         in.add("help");
@@ -151,7 +150,7 @@ public class IntegrationTest {
                 , getData());
     }
     @Test
-    public void TestConnectList() {
+    public void TestListAfterConnect() {
         //given
         in.add("connect|postgres|postgres|11111111");
         in.add("list");
@@ -168,10 +167,165 @@ public class IntegrationTest {
                 , getData());
     }
     @Test
-    public void TestFindNonExistList() {
+    public void TestConnectListAfterConnect() {
         //given
         in.add("connect|postgres|postgres|11111111");
-        in.add("find|nonExist");
+        in.add("list");
+        in.add("connect|test|postgres|11111111");
+        in.add("list");
+        in.add("exit");
+        //when
+        Main.main(new String[0]);
+        //then
+        assertEquals("Юзер, привет\r\n" +
+                        "Введите команду 'connect|логин|пароль|база' или 'help' для помощи\r\n" +
+                // connect
+                        "К базе '11111111' успешно подключились!\r\n" +
+                        "Можем вызвать список таблиц 'list' или вызвать таблицу 'find|baseName'\r\n" +
+                // list
+                        "[user1]\r\n" +
+                // connect
+                        "К базе '11111111' успешно подключились!\r\n" +
+                        "Можем вызвать список таблиц 'list' или вызвать таблицу 'find|baseName'\r\n" +
+                // list
+                        "[user1]\r\n" +
+                //exit
+                        "До скорой встречи!\r\n"
+                , getData());
+    }
+
+    @Test
+    public void TestCreateOneStringInTableAfterConnect() {
+        //given
+        in.add("connect|postgres|postgres|11111111");
+        in.add("list");
+        in.add("find|user1");
+        in.add("Y");
+        in.add("Y");
+        in.add("Y");
+        in.add("1");
+        in.add("Ibragim");
+        in.add("1000000");
+        in.add("N");
+        in.add("Y");
+        in.add("exit");
+        //when
+        Main.main(new String[0]);
+        //then
+        assertEquals("Юзер, привет\r\n" +
+                        "Введите команду 'connect|логин|пароль|база' или 'help' для помощи\r\n" +
+                        "К базе 'postgres' успешно подключились!\r\n" +
+                        "Можем вызвать список таблиц 'list' или вызвать таблицу 'find|baseName'\r\n" +
+                        "[user1]\r\n" +
+                        "Выбрана таблица:\r\n" +
+                        "Таблица 'user1'\r\n" +
+                        "Вы желаете изменить содержание таблицы 'user1' ? Y/N\r\n" +
+                        " Вы желаете очистить таблицу 'user1' перед введением новой информации? Y/N\r\n" +
+                        " Все строки таблицы 'user1' успешно удалены\r\n" +
+                        "Вы хотите ввести новые данные в таблицу 'user1' ? Y/N\r\n" +
+                        "Пожалуйста, введите данные. Построчно введите id, имя, зарплату \r\n" +
+                        "Строка данных успешно добавлена в таблицу 'user1' !\r\n" +
+                        "Вы хотите ввести новые данные в таблицу 'user1' ? Y/N\r\n" +
+                        "Вы желаете посмотреть содержимое всей таблицы 'user1' ? Y/N\r\n" +
+                        "------------------------------------\r\n" +
+                        "|id|name|salary|\r\n" +
+                        "------------------------------------\r\n" +
+                        "| 1 |  Ibragim |  1000000 |\r\n" +
+                        "------------------------------------\r\n" +
+                        "Продолжить работу? Y/'exit'\r\n" +
+                        "До скорой встречи!\r\n"
+                , getData());
+    }
+    @Test
+    public void TestCreateOneStringInTwoTablesInTwoBases() {
+        //given
+        in.add("connect|postgres|postgres|11111111");
+        in.add("find|user1");
+        in.add("Y");
+        in.add("Y");
+        in.add("Y");
+        in.add("1");
+        in.add("Ibragim");
+        in.add("1000000");
+        in.add("N");
+        in.add("Y");
+        in.add("Y");
+
+        in.add("connect|base_russian|postgres|11111111");
+        in.add("find|user1");
+        in.add("Y");
+        in.add("Y");
+        in.add("Y");
+        in.add("1");
+        in.add("Diumin");
+        in.add("1000000");
+        in.add("N");
+        in.add("Y");
+        in.add("exit");
+        //when
+        Main.main(new String[0]);
+        //then
+        assertEquals("Юзер, привет\r\n" +
+                        "Введите команду 'connect|логин|пароль|база' или 'help' для помощи\r\n" +
+                        "К базе 'postgres' успешно подключились!\r\n" +
+                        "Можем вызвать список таблиц 'list' или вызвать таблицу 'find|baseName'\r\n" +
+                        "Выбрана таблица:\r\n" +
+                        "Таблица 'user1'\r\n" +
+                        "Вы желаете изменить содержание таблицы 'user1' ? Y/N\r\n" +
+                        " Вы желаете очистить таблицу 'user1' перед введением новой информации? Y/N\r\n" +
+                        " Все строки таблицы 'user1' успешно удалены\r\n" +
+                        "Вы хотите ввести новые данные в таблицу 'user1' ? Y/N\r\n" +
+                        "Пожалуйста, введите данные. Построчно введите id, имя, зарплату \r\n" +
+                        "Строка данных успешно добавлена в таблицу 'user1' !\r\n" +
+                        "Вы хотите ввести новые данные в таблицу 'user1' ? Y/N\r\n" +
+                        "Вы желаете посмотреть содержимое всей таблицы 'user1' ? Y/N\r\n" +
+                        "------------------------------------\r\n" +
+                        "|id|name|salary|\r\n" +
+                        "------------------------------------\r\n" +
+                        "| 1 |  Ibragim |  1000000 |\r\n" +
+                        "------------------------------------\r\n" +
+                        "Продолжить работу? Y/'exit'\r\n" +
+                        "Введите команду\r\n" +
+                        "К базе 'base_russian' успешно подключились!\r\n" +
+                        "Можем вызвать список таблиц 'list' или вызвать таблицу 'find|baseName'\r\n" +
+                        "Выбрана таблица:\r\n" +
+                        "Таблица 'user1'\r\n" +
+                        "Вы желаете изменить содержание таблицы 'user1' ? Y/N\r\n" +
+                        " Вы желаете очистить таблицу 'user1' перед введением новой информации? Y/N\r\n" +
+                        " Все строки таблицы 'user1' успешно удалены\r\n" +
+                        "Вы хотите ввести новые данные в таблицу 'user1' ? Y/N\r\n" +
+                        "Пожалуйста, введите данные. Построчно введите id, имя, зарплату \r\n" +
+                        "Строка данных успешно добавлена в таблицу 'user1' !\r\n" +
+                        "Вы хотите ввести новые данные в таблицу 'user1' ? Y/N\r\n" +
+                        "Вы желаете посмотреть содержимое всей таблицы 'user1' ? Y/N\r\n" +
+                        "------------------------------------\r\n" +
+                        "|id|name|salary|\r\n" +
+                        "------------------------------------\r\n" +
+                        "| 1 |  Diumin |  1000000.0 |\r\n" +
+                        "------------------------------------\r\n" +
+                        "Продолжить работу? Y/'exit'\r\n" +
+                        "До скорой встречи!\r\n"
+                , getData());
+    }
+
+    @Test
+    /* DO NOT PASSED */public void TestCreateTwoStringsInTableAfterConnect() {
+        //given
+        in.add("connect|postgres|postgres|11111111");
+        in.add("list");
+        in.add("find|user1");
+        in.add("Y");
+        in.add("Y");
+        in.add("Y");
+        in.add("1");
+        in.add("Ibragim");
+        in.add("1000000");
+        in.add("Y");
+        in.add("2");
+        in.add("Ibragim2");
+        in.add("10000");
+        in.add("N");
+        in.add("Y");
         in.add("exit");
         //when
         Main.main(new String[0]);
@@ -181,6 +335,26 @@ public class IntegrationTest {
                         "К базе '11111111' успешно подключились!\r\n" +
                         "Можем вызвать список таблиц 'list' или вызвать таблицу 'find|baseName'\r\n" +
                         "[user1]\r\n" +
+                        "Выбрана таблица:\r\n" +
+                        "Таблица 'user1'\r\n" +
+                        "Вы желаете изменить содержание таблицы 'user1' ? Y/N\r\n" +
+                        " Вы желаете очистить таблицу 'user1' перед введением новой информации? Y/N\r\n" +
+                        " Все строки таблицы 'user1' успешно удалены\r\n" +
+                        "Вы хотите ввести новые данные в таблицу 'user1' ? Y/N\r\n" +
+                        "Пожалуйста, введите данные. Построчно введите id, имя, зарплату \r\n" +
+                        "Строка данных успешно добавлена в таблицу 'user1' !\r\n" +
+                        "Вы хотите ввести новые данные в таблицу 'user1' ? Y/N\r\n" +
+                        "Пожалуйста, введите данные. Построчно введите id, имя, зарплату \r\n" +
+                        "Строка данных успешно добавлена в таблицу 'user1' !\r\n" +
+                        "Вы хотите ввести новые данные в таблицу 'user1' ? Y/N\r\n" +
+                        "Вы желаете посмотреть содержимое всей таблицы 'user1' ? Y/N\r\n" +
+                        "------------------------------------\r\n" +
+                        "|id|name|salary|\r\n" +
+                        "------------------------------------\r\n" +
+                        "| 1 |  Ibragim |  1000000 |\r\n" +
+                        " 2 |  Ibragim2 |  10000 |\r\n" +
+                        "------------------------------------\r\n" +
+                        "Продолжить работу? Y/'exit'\r\n" +
                         "До скорой встречи!\r\n"
                 , getData());
     }

@@ -34,7 +34,9 @@ public class Find implements Command {
                     viewshka.wright("До скорой встречи!");
                     throw new ExitException();
                 } else if (read1.equals("Y")) {
-                    //TODO и как мы повторим работу с выбранной таблицей?
+                    viewshka.wright("Введите команду");
+
+                    //TODO и как мы повторим работу с выбранной таблицей? как реализуем это в подсказках?
                 } else {
                     viewshka.wright("Несуществующая команда!");
                 }
@@ -72,8 +74,11 @@ public class Find implements Command {
             } else {
                 break;
             }
-            viewshka.wright("Пожалуйста, введите название существующей таблицы");
+            viewshka.wright("Пожалуйста, введите название существующей таблицы или 'exit' для выхода из программы");
             command1 = viewshka.read();
+            if (command1.equals("exit")){
+                throw new ExitException();
+            }
         }
     }
 

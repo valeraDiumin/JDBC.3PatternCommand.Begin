@@ -4,7 +4,8 @@ import view.Viewshka;
 import connectAndCommands.DataBaseManager;
 
 public class Connect implements Command {
-    private static final String COMMAND_SAMPLE = "connect|postgres|postgres|11111111";
+    private static final String COMMAND_SAMPLE = "connect|postgres|postgres|11111111";// в сервере 2; postgresql 9.2; база postgres
+     // вторая база "connect|base_russian|postgres|11111111"
     private DataBaseManager manager;
     private Viewshka viewshka;
     private IsConnected isConnected;
@@ -36,7 +37,7 @@ public class Connect implements Command {
                 String baseName = strings[3];
 
                 manager.connect(login, parole, baseName);
-                viewshka.wright(String.format("К базе '%s' успешно подключились!", baseName));
+                viewshka.wright(String.format("К базе '%s' успешно подключились!", login));
                 viewshka.wright("Можем вызвать список таблиц 'list' или вызвать таблицу 'find|baseName'");
             } catch (Throwable e) {
                 connectError(e);

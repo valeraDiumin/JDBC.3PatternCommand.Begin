@@ -160,7 +160,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
         }
 //        try {
         connection = DriverManager
-                .getConnection("jdbc:postgresql://localhost:5432/" + baseName + "",
+                .getConnection("jdbc:postgresql://localhost:5432/" + baseName + "",// TODO попутаны местами название базы/логин/пароль
                         login, parole);
 //        } catch (SQLException e) {
 //            System.out.println(String.format("Can't get connection for database:%s user:%s", baseName, login));//прикольно!!!!!!!!!!!1
