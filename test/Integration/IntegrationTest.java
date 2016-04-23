@@ -1,10 +1,12 @@
 package Integration;
 
 import controller.Main;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 
@@ -26,10 +28,18 @@ public class IntegrationTest {
 
     public String getData() {
         try {
-            return new String(out.toByteArray(), "UTF-8");
+            String result = new String(out.toByteArray(), "UTF-8");
+            out.reset();
+            return result;
         } catch (UnsupportedEncodingException e) {
             return e.getMessage();
+        } catch (IOException e){
+            return e.getMessage();
         }
+    }
+    @Before
+    public void clearIn() throws IOException {
+        in.reset();
     }
 
     @Test
@@ -114,10 +124,10 @@ public class IntegrationTest {
         //then
         assertEquals("Юзер, привет\r\n" +
                 "Введите команду 'connect|логин|пароль|база' или 'help' для помощи\r\n" +
-                "К базе '11111111' успешно подключились!\r\n" +
-                "Можем вызвать список таблиц 'list' или вызвать таблицу 'find|baseName'\r\n" +
-                "Несуществующая команда!\r\n" +
-                "До скорой встречи!\r\n", getData());
+                        "К базе 'postgres' успешно подключились!\r\n" +
+                        "Можем вызвать список таблиц 'list' или вызвать таблицу 'find|baseName'\r\n" +
+                        "Несуществующая команда!\r\n" +
+                        "До скорой встречи!\r\n", getData());
     }
     @Test
     public void TestHelpAfterConnect() {
@@ -130,10 +140,8 @@ public class IntegrationTest {
         //then
         assertEquals("Юзер, привет\r\n" +
                         "Введите команду 'connect|логин|пароль|база' или 'help' для помощи\r\n" +
-                // connect
-                        "К базе '11111111' успешно подключились!\r\n" +
+                        "К базе 'postgres' успешно подключились!\r\n" +
                         "Можем вызвать список таблиц 'list' или вызвать таблицу 'find|baseName'\r\n" +
-                // help
                         "Существующие команды :\r\n" +
                         "\t 'connect|логин|пароль|база' -> \r\n" +
                         "\t для подключения к базе данных\r\n" +
@@ -145,7 +153,6 @@ public class IntegrationTest {
                         "\t для выхода из программы\r\n" +
                         "\t 'find|columnName' -> \r\n" +
                         "\t для выбора нужной таблицы\r\n" +
-                // exit
                         "До скорой встречи!\r\n"
                 , getData());
     }
@@ -160,7 +167,7 @@ public class IntegrationTest {
         //then
         assertEquals("Юзер, привет\r\n" +
                         "Введите команду 'connect|логин|пароль|база' или 'help' для помощи\r\n" +
-                        "К базе '11111111' успешно подключились!\r\n" +
+                        "К базе 'postgres' успешно подключились!\r\n" +
                         "Можем вызвать список таблиц 'list' или вызвать таблицу 'find|baseName'\r\n" +
                         "[user1]\r\n" +
                         "До скорой встречи!\r\n"
@@ -179,17 +186,12 @@ public class IntegrationTest {
         //then
         assertEquals("Юзер, привет\r\n" +
                         "Введите команду 'connect|логин|пароль|база' или 'help' для помощи\r\n" +
-                // connect
-                        "К базе '11111111' успешно подключились!\r\n" +
+                        "К базе 'postgres' успешно подключились!\r\n" +
                         "Можем вызвать список таблиц 'list' или вызвать таблицу 'find|baseName'\r\n" +
-                // list
                         "[user1]\r\n" +
-                // connect
-                        "К базе '11111111' успешно подключились!\r\n" +
+                        "К базе 'test' успешно подключились!\r\n" +
                         "Можем вызвать список таблиц 'list' или вызвать таблицу 'find|baseName'\r\n" +
-                // list
-                        "[user1]\r\n" +
-                //exit
+                        "[user]\r\n" +
                         "До скорой встречи!\r\n"
                 , getData());
     }
@@ -332,7 +334,7 @@ public class IntegrationTest {
         //then
         assertEquals("Юзер, привет\r\n" +
                         "Введите команду 'connect|логин|пароль|база' или 'help' для помощи\r\n" +
-                        "К базе '11111111' успешно подключились!\r\n" +
+                        "К базе 'postgres' успешно подключились!\r\n" +
                         "Можем вызвать список таблиц 'list' или вызвать таблицу 'find|baseName'\r\n" +
                         "[user1]\r\n" +
                         "Выбрана таблица:\r\n" +
