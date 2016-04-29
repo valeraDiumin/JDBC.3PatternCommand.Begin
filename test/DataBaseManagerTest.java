@@ -37,12 +37,12 @@ public abstract class DataBaseManagerTest {
     public void getTableDataTest() {
         manager.clear(tableName1);
 
-        // when create string in base
+        // when createString string in base
         DataSet data = new DataSet();
         data.putNewString("id", 3);
         data.putNewString("name", "Jack Bob");
         data.putNewString("salary", "1000000");
-        manager.create(data, tableName1); // I have to give to method the name of table or hardcode it to method create
+        manager.createString(data, tableName1); // I have to give to method the name of table or hardcode it to method createString
         DataSet[] users = manager.getTableData(tableName1);
 
         assertEquals(1, users.length);
@@ -58,20 +58,20 @@ public abstract class DataBaseManagerTest {
         //        give table from base and prepare it for test
         manager.clear(tableName1);
 
-        // when create string in base
+        // when createString string in base
         DataSet updateData = new DataSet();
         updateData.putNewString("id", 1);
         updateData.putNewString("name", "Bob");
         updateData.putNewString("salary", "10");
         //putNewString data to connectAndCommands.DataSet object
-        manager.create(updateData, tableName1); // I have to give to method the name of table or hardcode it to method create
+        manager.createString(updateData, tableName1); // I have to give to method the name of table or hardcode it to method createString
 
         DataSet updateData2 = new DataSet();
         updateData2.putNewString("id", 3);
         updateData2.putNewString("name", "Jack Bob");
         updateData2.putNewString("salary", "1000000");
         //putNewString data to connectAndCommands.DataSet object
-        manager.create(updateData2, tableName1); // I have to give to method the name of table or hardcode it to method create
+        manager.createString(updateData2, tableName1); // I have to give to method the name of table or hardcode it to method createString
 
         DataSet updateData1 = new DataSet();
         updateData1.putNewString("id", 3);
@@ -94,23 +94,23 @@ public abstract class DataBaseManagerTest {
         assertEquals("[3, Jack, 1000]", Arrays.toString(user.getColumnValues()));
     }
     @Test
-    public void getSizeTest() { // delete all strings and create one string
+    public void getSizeTest() { // delete all strings and createString one string
         manager.clear(tableName1);
 
-        // when create string in base
+        // when createString string in base
         DataSet updateData = new DataSet();
         updateData.putNewString("id", 3);
         updateData.putNewString("name", "Jack Bob");
         updateData.putNewString("salary", "1000000");
         //putNewString data to connectAndCommands.DataSet object
-        manager.create(updateData, tableName1); // I have to give to method the name of table or hardcode it to method create
+        manager.createString(updateData, tableName1); // I have to give to method the name of table or hardcode it to method createString
 
         DataSet updateData1 = new DataSet();
         updateData1.putNewString("id", 4);
         updateData1.putNewString("name", "Jack Bob0");
         updateData1.putNewString("salary", "1");
         //putNewString data to connectAndCommands.DataSet object
-        manager.create(updateData1, tableName1); // I have to give to method the name of table or hardcode it to method create
+        manager.createString(updateData1, tableName1); // I have to give to method the name of table or hardcode it to method createString
 
         //give data from base and test array of data length (amount of strings in data)
 
@@ -124,13 +124,13 @@ public abstract class DataBaseManagerTest {
     public void getTableHeadTest() {
         manager.clear(tableName1);
 
-        // when create string in base
+        // when createString string in base
         DataSet updateData = new DataSet();
         updateData.putNewString("id", 3);
         updateData.putNewString("name", "Jack Bob");
         updateData.putNewString("salary", "1000000");
         //putNewString data to connectAndCommands.DataSet object
-        manager.create(updateData, tableName1);
+        manager.createString(updateData, tableName1);
 
         String tableHead = Arrays.toString(manager.getTableHead(tableName1));
         assertEquals("[id, name, salary]", tableHead);
@@ -142,7 +142,7 @@ public abstract class DataBaseManagerTest {
         data.putNewString("id", 3);
         data.putNewString("name", "Jack Bob");
         data.putNewString("salary", "1000000");
-        manager.create(data, tableName1); // I have to give to method the name of table or hardcode it to method create
+        manager.createString(data, tableName1); // I have to give to method the name of table or hardcode it to method createString
         String tableValue = manager.getTableValue(tableName1);
 
         assertEquals("| 3 |  Jack Bob |  1000000 |", tableValue);

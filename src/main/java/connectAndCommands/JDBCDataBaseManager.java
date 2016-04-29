@@ -11,9 +11,9 @@ public class JDBCDataBaseManager implements DataBaseManager {
     public void updateFromDataSet(String tableName1, DataSet updateData1, int id) {
         try {
             String format = "%s = ?,";
-            String tableNames = getStringFormatted(updateData1, format);
+            String updatedString = getStringFormatted(updateData1, format);
 
-            String update = " UPDATE " + tableName1 + " SET " + tableNames + " WHERE id = ?";
+            String update = " UPDATE " + tableName1 + " SET " + updatedString + " WHERE id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(update);
 
             int index = 1;
@@ -119,16 +119,6 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
     @Override
     public void selectAndPrint(String tableName) {
-
-    }
-
-    private String getStringFormattedArray(String[] listOfColumns, String format) {
-        String tableNames = "";
-        for(String tableNameFromDataSet : listOfColumns) {
-            tableNames += String.format(format, tableNameFromDataSet);
-        }
-        tableNames = tableNames.substring(0, tableNames.length() - 1);
-        return tableNames;
     }
 
     @Override
@@ -173,9 +163,6 @@ public class JDBCDataBaseManager implements DataBaseManager {
         return connection != null;
     }
 
-    public Connection getConnection() {
-        return connection;
-    }
 
     @Override
     public void createNewTable(String tableName) {
@@ -186,24 +173,24 @@ public class JDBCDataBaseManager implements DataBaseManager {
                     " (ID INT PRIMARY KEY     NOT NULL," +
                     " NAME           TEXT    NOT NULL, " +
                     " SALARY         TEXT )";
-            System.out.println("Table " + tableName + " created successfully");
             stmt.executeUpdate(sql);
             stmt.close();
         } catch ( Exception e ) {
             System.err.println( e.getClass().getName()+": "+ e.getMessage() );
             System.exit(0);
         }
-
     }
-
-    public static void delete(Connection connection, String delete) {
+    @Override
+    public void dropTable(String tableName) {
+        Statement stmt;
         try {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(delete);
-            System.out.println("deleting from table" + tableName + " have done successfully");
-            statement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            stmt = connection.createStatement();
+            String sql = "DROP TABLE " + tableName;
+            stmt.executeUpdate(sql);
+            stmt.close();
+        } catch ( Exception e ) {
+            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+            System.exit(0);
         }
     }
 
@@ -232,17 +219,6 @@ public class JDBCDataBaseManager implements DataBaseManager {
         return listOfColumns;
     }
 
-    public static void insert(Connection connection, String insert, String tableName) {
-        try {
-            Statement statement1 = connection.createStatement();
-            statement1.executeUpdate(insert);
-            System.out.println("insertion to table" + tableName + " have done successfully");
-            statement1.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void clear(String tableName){
         try {
@@ -256,15 +232,15 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public void create(DataSet input, String tableName1){ // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!
+    public void createString(DataSet input, String tableName1){ // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!
         try {
             Statement statement = connection.createStatement();
 
-            // create string of column names
+            // createString string of column names
             String format = "%s,";
             String StringTableNames = getStringFormatted(input, format);
 
-            // create string of column values
+            // createString string of column values
             String formatValue = "'%s',";
             String StringTableValue = getStringValue(input, formatValue);
 

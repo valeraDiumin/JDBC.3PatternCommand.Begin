@@ -136,7 +136,7 @@ public class Find implements Command {
                     String salary = viewshka.read();
                     dataSet.putNewString("salary", salary);
 
-                    manager.create(dataSet, tableName);
+                    manager.createString(dataSet, tableName);
                     viewshka.wright("Строка данных успешно добавлена в таблицу '" + tableName + "' !");
                 } else if (read2.equals("N")) {
                     break;

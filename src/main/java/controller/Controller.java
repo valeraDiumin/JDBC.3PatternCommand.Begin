@@ -12,13 +12,18 @@ public class Controller {
     public Controller(DataBaseManager manager, Viewshka viewshka) {
         this.viewshka = viewshka;
         this.commands = new Command[]{
-                new Connect(manager, viewshka),
                 new Help(viewshka),
                 new Exit(viewshka),
+                new Connect(manager, viewshka),
                 new IsConnected(manager, viewshka),
                 new List(manager, viewshka),
                 new Find(manager, viewshka, tableName, commands),
-                new Unsupported(viewshka)
+                new CreateTable(manager, viewshka),
+                new DeleteTable(manager, viewshka),
+                new Print(manager, viewshka, tableName, commands),
+                new AddStringToTable(manager, viewshka, tableName, commands),
+                new Clear_table(manager, viewshka, tableName, commands),
+                new Unsupported(viewshka),
         };
     }
 

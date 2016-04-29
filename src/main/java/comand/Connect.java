@@ -25,7 +25,6 @@ public class Connect implements Command {
     @Override
     public void process(String command) {
             try {
-
                 String[] strings = command.split("\\|");
                 if (strings.length != parametersLength()) {
                     throw new IllegalArgumentException(String.format("Неверное количество параметров, разделенных '|' , " +
@@ -53,10 +52,10 @@ public class Connect implements Command {
                 e.getClass().getSimpleName() + " : " +
                         e.getMessage(); // инфа полезная разработчику, но не юзеру!
         Throwable cause = e.getCause();
-//        if (e.getCause() != null) { // если вызвать нулевой e.getCause(), выскочит ексепшин!!!
-//            connectMassage += "\n" +
-//                    cause.getClass().getSimpleName() + ":  " + e.getCause().getMessage();
-//        }
+        if (e.getCause() != null) { // если вызвать нулевой e.getCause(), выскочит ексепшин!!!
+            connectMassage += "\n" +
+                    cause.getClass().getSimpleName() + ":  " + e.getCause().getMessage();
+        }
         viewshka.wright("Неудача по причине: \n" + connectMassage);
         viewshka.wright("Пожалуйста, повторите попытку");
     }

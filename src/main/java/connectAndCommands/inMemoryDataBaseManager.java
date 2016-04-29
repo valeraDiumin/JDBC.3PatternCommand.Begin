@@ -3,7 +3,7 @@ package connectAndCommands;
 import java.util.Arrays;
 
 public class inMemoryDataBaseManager implements DataBaseManager {
-    // TODO It is possible to create multitable class with some tables.
+    // TODO It is possible to createString multitable class with some tables.
     public static final String TABLE_NAME = "user1"; // то есть база данных заточена только под "user"
     private DataSet[] data;//each data is object for storing one string
 
@@ -42,7 +42,7 @@ public class inMemoryDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public void create(DataSet input, String tableName1) {//TODO вносит всё подряд без проверки на одинаковость id
+    public void createString(DataSet input, String tableName1) {//TODO вносит всё подряд без проверки на одинаковость id
         data[freeIndex] = input;
         freeIndex++;
 
@@ -82,6 +82,11 @@ public class inMemoryDataBaseManager implements DataBaseManager {
 
     @Override
     public void selectAndPrint(String tableName) {
+
+    }
+
+    @Override
+    public void dropTable(String tableName) {
 
     }
 

@@ -11,7 +11,7 @@ public interface DataBaseManager {
 
     void clear(String tableName);
 
-    void create(DataSet input, String tableName1);
+    void createString(DataSet input, String tableName1);
 
     String getStringValue(DataSet input, String formatValue);
 
@@ -26,6 +26,8 @@ public interface DataBaseManager {
     String[] getTableNames();
 
     void selectAndPrint(String tableName);
+
+    void dropTable(String tableName);
 
     String[] getTableHead(String tableName);
 
