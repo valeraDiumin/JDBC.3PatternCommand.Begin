@@ -25,7 +25,7 @@ public class DeleteTable implements Command {
     public void process(String command) {
         try {
             String[] strings = command.split("\\|");
-            ifWrongAmountOfParameters(strings);
+            validationAmountOfParameters(strings);
 
 
             String tableName = strings[1];
@@ -51,7 +51,7 @@ public class DeleteTable implements Command {
     }
 
 
-    protected void ifWrongAmountOfParameters(String[] strings) {
+    protected void validationAmountOfParameters(String[] strings) {
         if (strings.length != parametersLength()) {
             throw new IllegalArgumentException(String.format("Неверное количество параметров, разделенных '|' , " +
                     "необходимо %s, а введено: %s", parametersLength(), strings.length));

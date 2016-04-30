@@ -8,6 +8,7 @@ public class Clear_table implements Command {
     private Viewshka viewshka;
     private String tableName;
     private Command[] commands;
+    private String COMMAND_SAMPLE = "clear|user1";
 
     public Clear_table(DataBaseManager manager, Viewshka viewshka, String tableName, Command[] commands) {
 
@@ -24,6 +25,14 @@ public class Clear_table implements Command {
 
     @Override
     public void process(String command) {
+        try {
+            if (command.split("\\|").length != parametersLength()) {
+                throw new IllegalArgumentException(String.format("Неверное количество параметров, разделенных '|' , " +
+                        "необходимо %s, а введено: %s. Вводите в формате clear|tableName", parametersLength(), command.split("\\|").length));
+            }
+        } catch (Throwable e) {
+            System.out.println(e.getMessage());
+        }
         if (doFind(command)) {
             viewshka.wright(String.format("Вы действительно хотите очистить таблицу '%s'? 'Y'/'N'", tableName));
             String read1 = viewshka.read();
@@ -75,5 +84,9 @@ public class Clear_table implements Command {
                 throw new ExitException();
             }
         }
+    }
+
+    private int parametersLength() {
+        return COMMAND_SAMPLE.split("\\|").length;
     }
 }

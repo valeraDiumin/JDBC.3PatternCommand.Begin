@@ -24,7 +24,7 @@ public class Controller {
                 new AddStringToTable(manager, viewshka, tableName, commands),
                 new Clear_table(manager, viewshka, tableName, commands),
                 new Unsupported(viewshka),
-        };
+        }; //TODO Вы не можете пользоваться командой 'Connect', пока не подсоединились к базе.
     }
 
     public void run() {

@@ -8,14 +8,13 @@ import view.Viewshka;
  * Created by 123 on 29.04.2016.
  */
 public class AddStringToTable implements Command {
-    private static final String COMMAND_SAMPLE = "createString|user1|12|John|1000";
+    private static final String COMMAND_SAMPLE = "createString|user1|12|John|1000|14|Dodo|500000";
     private DataBaseManager manager;
     private Viewshka viewshka;
     private DataSet dataSet;
 
     public AddStringToTable(DataBaseManager manager, Viewshka viewshka, String tableName, Command[] commands) {
         this.manager = manager;
-
         this.viewshka = viewshka;
     }
 
@@ -28,37 +27,38 @@ public class AddStringToTable implements Command {
     public void process(String command) {
         try {
             String[] strings = command.split("\\|");
-            ifWrongAmountOfParameters(strings);
+            validationAmountOfParameters(strings);
 
             creatingStringInTable(strings);
-
+//TODO когда вводим сразу 2 строки одной командой ( как в примере выше), слетает база
         } catch (Throwable e) {
             System.out.println(e.getMessage());
         }
     }
 
     protected void creatingStringInTable(String[] strings) {
-        DataSet dataSet = new DataSet();
-        String id = strings[2];
-        dataSet.putNewString("id", id);
-        String name = strings[3];
-        dataSet.putNewString("name", name);
-        String salary = strings[4];
-        dataSet.putNewString("salary", salary);
-        String tableName = strings[1];
-        manager.createString(dataSet, tableName);
-        viewshka.wright(String.format("Строка в таблице '%s'со значениями id = '%s', name = '%s', salary = '%s'" +
-                " успешно создана!", tableName, id, name, salary));
-    }
-
-    protected void ifWrongAmountOfParameters(String[] strings) {
-        if (strings.length != parametersLength()) {
-            throw new IllegalArgumentException(String.format("Неверное количество параметров, разделенных '|' , " +
-                    "необходимо %s, а введено: %s", parametersLength(), strings.length));
+        for (int i = 0; i<((strings.length-2)/3); i++) {
+            DataSet dataSet = new DataSet();
+            String id = strings[(i*3)+2];
+//            System.out.println(id);
+            dataSet.putNewString("id", id);
+            String name = strings[(i*3)+3];
+//            System.out.println(name);
+            dataSet.putNewString("name", name);
+            String salary = strings[(i*3)+4];
+//            System.out.println(salary);
+            dataSet.putNewString("salary", salary);
+            String tableName = strings[(i*3)+1];
+            manager.createString(dataSet, tableName);
+            viewshka.wright(String.format("Строка в таблице '%s'со значениями id = '%s', name = '%s', salary = '%s'" +
+                    " успешно создана!", tableName, id, name, salary));
         }
     }
 
-    private int parametersLength() {
-        return COMMAND_SAMPLE.split("\\|").length;
+    protected void validationAmountOfParameters(String[] strings) {
+        if (((strings.length-2)%3) != 0) {
+            throw new IllegalArgumentException(String.format("Неверное количество параметров, разделенных '|', " +
+                    "введено: %s", strings.length));
+        }
     }
 }
