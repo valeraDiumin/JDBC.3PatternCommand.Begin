@@ -18,7 +18,7 @@ public class Exit implements Command {
     @Override
     public void process(String command) {
         viewshka.wright("До скорой встречи!");
-        //System.exit(0);
+        //System.exit(0); вместо такого выхода выбрасываем ексепшин, который ловится классом ExitException extends RuntimeException
         throw new ExitException();
     }
 }

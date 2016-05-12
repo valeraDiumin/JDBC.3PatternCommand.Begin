@@ -9,13 +9,16 @@ public class Find implements Command {
     private Viewshka viewshka;
     private String tableName;
     private Command[] commands;
+    IsTableExistInBase isTableExistInBase;
+    private String COMMAND_SAMPLE = "find|tableName";
 
-    public Find(DataBaseManager manager, Viewshka viewshka, String tableName, Command[] commands) {
+    public Find(DataBaseManager manager, Viewshka viewshka, Command[] commands) {
 
         this.manager = manager;
         this.viewshka = viewshka;
-        this.tableName = tableName;
         this.commands = commands;
+        isTableExistInBase = new IsTableExistInBase();
+
     }
 
     @Override
@@ -25,9 +28,21 @@ public class Find implements Command {
 
     @Override
     public void process(String command) {// не может вызваться массив из Контроллера!
-            if (doFind(command)) {
+        String[] strings = command.split("\\|");
+        tableName = strings[1];
+
+        try {
+            if (command.split("\\|").length != parametersLength()) {
+                throw new IllegalArgumentException(String.format("Неверное количество параметров, разделенных '|' , " +
+                        "необходимо %s, а введено: %s. Вводите в формате find|tableName", parametersLength(), command.split("\\|").length));
+            }
+        } catch (Throwable e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            if (isTableExistInBase.isTableNameRight(command, manager)) {
                 changingTable(tableName);
-                printTable(tableName);
                 viewshka.wright("Продолжить работу? Y/'exit'");
                 String read1 = viewshka.read();
                 if (read1.equals("exit")) {
@@ -40,76 +55,14 @@ public class Find implements Command {
                 } else {
                     viewshka.wright("Несуществующая команда!");
                 }
-
-        }
-    }
-
-    private boolean doFind(String command) {
-        viewshka.wright("Выбрана таблица:");
-        String[] split = command.split("\\|");
-        if (split.length <= 1) {
-            viewshka.wright("Таблица не выбрана");
-            return false;
-        } else {
-            String command1 = split[1];
-            viewshka.wright(String.format("Таблица '%s'", command1));
-            isTableNameRight(command1);
-            return true;
-        }
-    }
-
-    private void isTableNameRight(String command1) {
-        String[] tableList = manager.getTableNames();
-        while (true) {
-            boolean isTableChoiced = false;
-            for (String aTableList : tableList) {
-                if (aTableList.equals(command1)) {
-                    tableName = command1;
-                    isTableChoiced = true;
-                    break;
-                }
             }
-            if (!isTableChoiced) {
-                viewshka.wright("Вы ввели название несуществующей таблицы");//(String.format("Вы ввели название несуществующей таблицы '%s'", tableName));
-            } else {
-                break;
-            }
-            viewshka.wright("Пожалуйста, введите название существующей таблицы или 'exit' для выхода из программы");
-            command1 = viewshka.read();
-            if (command1.equals("exit")){
-                throw new ExitException();
-            }
+        } catch (IllegalArgumentException e){
+            viewshka.wright(e.getMessage());
         }
     }
-
-    private void printTable(String tableName) {
-        viewshka.wright("Вы желаете посмотреть содержимое всей таблицы '" + tableName + "' ? Y/N");
-        String read = viewshka.read();
-        if (read.equals("Y")) {
-            printHeader(tableName);
-            printRows(tableName);
-        }
+    private int parametersLength() {
+        return COMMAND_SAMPLE.split("\\|").length;
     }
-
-    private void printHeader(String tableName) {
-        String[] tableHead = manager.getTableHead(tableName);
-        viewshka.wright("------------------------------------");
-        String result = "|";
-        for (String aTableHead : tableHead) {
-            result += aTableHead + "|";
-        }
-        result.substring(0, result.length() - 1);
-        viewshka.wright(result);
-        viewshka.wright("------------------------------------");
-    }
-
-    private void printRows(String tableName) {// Возможно, этот вариант лучше, чем показанный во 2 лекции: преобразование
-        // кода идёт не заходя в класс DataSet, а в DataBaseManager формируем строку отчёта (может, и распечатывать лучше там же)
-        String tableValue = manager.getTableValue(tableName);
-        viewshka.wright(tableValue);
-        viewshka.wright("------------------------------------");
-    }
-
     private void changingTable(String tableName) {
         viewshka.wright("Вы желаете изменить содержание таблицы '" + tableName + "' ? Y/N");
         String iWishToChangeTable = viewshka.read(); //TODO если что-то другое кроме Y/N, то поправить и предложить снова ввести.....
@@ -138,6 +91,10 @@ public class Find implements Command {
 
                     manager.createString(dataSet, tableName);
                     viewshka.wright("Строка данных успешно добавлена в таблицу '" + tableName + "' !");
+                    // TODO при ошибке базы
+                    // и распечатке стектрейса пишет "Строка данных успешно добавлена в таблицу 'user1' !"???????
+                    // не хватает "палочки" в начале второй строки данных таблицы
+                    // для завершённости ветки find|tableName не хватает (при отказе от добавления строки выпадет, а если я хочу распечатать таблицу?)
                 } else if (read2.equals("N")) {
                     break;
                 } else {

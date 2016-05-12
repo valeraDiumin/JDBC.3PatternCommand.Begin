@@ -3,9 +3,6 @@ package comand;
 import connectAndCommands.DataBaseManager;
 import view.Viewshka;
 
-/**
- * Created by 123 on 29.04.2016.
- */
 public class CreateTable implements Command {
     private DataBaseManager manager;
     private Viewshka viewshka;
@@ -26,11 +23,8 @@ public class CreateTable implements Command {
         try {
             String[] strings = command.split("\\|");
             ifWrongAmountOfParameters(strings);
-
-
             String tableName = strings[1];
             createTable(tableName);
-
         } catch (Throwable e) {
             System.out.println(e.getMessage());
         }
@@ -40,7 +34,6 @@ public class CreateTable implements Command {
             manager.createNewTable(tableName);
             viewshka.wright(" Таблица '" + tableName + "' успешно создана");
     }
-
 
     protected void ifWrongAmountOfParameters(String[] strings) {
         if (strings.length != parametersLength()) {

@@ -87,7 +87,7 @@ public class inMemoryDataBaseManager implements DataBaseManager {
 
     @Override
     public void dropTable(String tableName) {
-
+        freeIndex = 0;
     }
 
     @Override

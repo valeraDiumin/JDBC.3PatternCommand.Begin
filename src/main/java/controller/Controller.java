@@ -17,7 +17,7 @@ public class Controller {
                 new Connect(manager, viewshka),
                 new IsConnected(manager, viewshka),
                 new List(manager, viewshka),
-                new Find(manager, viewshka, tableName, commands),
+                new Find(manager, viewshka, commands),
                 new CreateTable(manager, viewshka),
                 new DeleteTable(manager, viewshka),
                 new Print(manager, viewshka, tableName, commands),
@@ -29,31 +29,35 @@ public class Controller {
 
     public void run() {
         try {
-            doWork();
+            runCommands();
         } catch (ExitException e) {
-            //do nothing
+//            do nothing
         }
     }
 
-    protected void doWork() {
-        greeting(viewshka);
-        do {
-            String command = viewshka.read();
-            if (command == null) {
-                new Exit(viewshka).process("");
-            }
-            for (Command command1 : commands) {//
-                if (command1.canProcess(command)) {
-                    command1.process(command);
-                    break;
+    protected void runCommands() {
+        try {
+            greeting(viewshka);
+            do {
+                String command = viewshka.read();
+                if (command == null) {
+                    new Exit(viewshka).process("");
                 }
-            }
-        } while (true);
+                for (Command command1 : commands) {//
+                    if (command1.canProcess(command)) {
+                        command1.process(command);
+                        break;
+                    }
+                }
+            } while (true);
+        } catch (IllegalArgumentException e){
+            viewshka.wright(e.getMessage());
+        }
     }
 
     protected static void greeting(Viewshka viewshka) {
         viewshka.wright("Юзер, привет");
-        viewshka.wright("Введите команду 'connect|логин|пароль|база' или 'help' для помощи");
+        viewshka.wright("Для входа в базу данных введи команду 'connect|логин|пароль|база' или 'help' для помощи");
     }
 }
 

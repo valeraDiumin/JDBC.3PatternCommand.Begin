@@ -4,9 +4,6 @@ import connectAndCommands.DataBaseManager;
 import connectAndCommands.DataSet;
 import view.Viewshka;
 
-/**
- * Created by 123 on 29.04.2016.
- */
 public class AddStringToTable implements Command {
     private static final String COMMAND_SAMPLE = "createString|user1|12|John|1000|14|Dodo|500000";
     private DataBaseManager manager;
@@ -48,10 +45,10 @@ public class AddStringToTable implements Command {
             String salary = strings[(i*3)+4];
 //            System.out.println(salary);
             dataSet.putNewString("salary", salary);
-            String tableName = strings[(i*3)+1];
+            String tableName = strings[1];
             manager.createString(dataSet, tableName);
-            viewshka.wright(String.format("Строка в таблице '%s'со значениями id = '%s', name = '%s', salary = '%s'" +
-                    " успешно создана!", tableName, id, name, salary));
+            viewshka.wright(String.format("Строка в таблице '%s'со значениями id = '%s', " +
+                    "name = '%s', salary = '%s'" + " успешно создана!", tableName, id, name, salary));
         }
     }
 
