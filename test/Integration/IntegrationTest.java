@@ -133,15 +133,45 @@ public class IntegrationTest {
     @Test
     public void TestFindWithConnect() { // contents are identical!!!!! DO NOT PASSED - if "DataBaseManager manager = new JDBCDataBaseManager();"
         in.add("connect|postgres|postgres|11111111");
+        in.add("find|unsupported|unsupported");
+        in.add("list");
+        in.add("clear|user1");
+        in.add("Y");
+        in.add("print|user1");
         in.add("find|unsupported");
+        in.add("find|user1");
+        in.add("Y");
+        in.add("Y");
+        in.add("Y");
+        in.add("1");
+        in.add("John");
+        in.add("1000 0000");
+        in.add("N");
         in.add("exit");
         Main.main(new String[0]);
         assertEquals("Юзер, привет\n" +
                 "Для входа в базу данных введи команду 'connect|логин|пароль|база' или 'help' для помощи\n" +
-                "Вы не можете пользоваться командой 'find|unsupported', пока не подсоединились к базе. \n" +
-                "Введите команду 'connect|' для начала процедуры соединения с базой, \n" +
-                "  'exit' для выхода из программы \n" +
-                "   или 'help' для помощи\n" +
+                "К базе 'postgres' успешно подключились!\n" +
+                "Можем вызвать список таблиц 'list' или вызвать таблицу 'find|baseName'\n" +
+                "Неверное количество параметров, разделенных '|' , необходимо 2, а введено: 3. Вводите в формате find|tableName\n" +
+                "Вы ввели название несуществующей таблицы\n" +
+                "[user1]\n" +
+                "Вы действительно хотите удалить все строки таблицы 'user1'? 'Y'/'N'\n" +
+                " Все строки таблицы 'user1' успешно удалены\n" +
+                "------------------------------------\n" +
+                "|id|name|salary|\n" +
+                "------------------------------------\n" +
+                "\n" +
+                "------------------------------------\n" +
+                "Вы ввели название несуществующей таблицы\n" +
+                "Вы желаете изменить содержание таблицы 'user1' ? Y/N\n" +
+                " Вы желаете очистить таблицу 'user1' перед введением новой информации? Y/N\n" +
+                " Все строки таблицы 'user1' успешно удалены\n" +
+                "Вы хотите ввести новые данные в таблицу 'user1' ? Y/N\n" +
+                "Пожалуйста, введите данные. Построчно введите id, имя, зарплату \n" +
+                "Строка данных успешно добавлена в таблицу 'user1' !\n" +
+                "Вы хотите ввести новые данные в таблицу 'user1' ? Y/N\n" +
+                "Продолжить работу? Y/'exit'\n" +
                 "До скорой встречи!\n", getData());
     }
     @Test
@@ -168,50 +198,6 @@ public class IntegrationTest {
     }
 
     @Test
-    public void TestCreateOneStringInTableAfterConnect() {
-        //given
-        in.add("connect|postgres|postgres|11111111");
-        in.add("list");
-        in.add("find|user1");
-        in.add("Y");
-        in.add("Y");
-        in.add("Y");
-        in.add("1");
-        in.add("Ibragim");
-        in.add("1000000");
-        in.add("N");
-        in.add("Y");
-        in.add("Y");
-        in.add("print|user1");
-        in.add("exit");
-        //when
-        Main.main(new String[0]);
-        //then
-        assertEquals("Юзер, привет\n" +
-                        "Для входа в базу данных введи команду 'connect|логин|пароль|база' или 'help' для помощи\n" +
-                        "К базе 'postgres' успешно подключились!\n" +
-                        "Можем вызвать список таблиц 'list' или вызвать таблицу 'find|baseName'\n" +
-                        "[user1]\n" +
-                        "Вы желаете изменить содержание таблицы 'user1' ? Y/N\n" +
-                        " Вы желаете очистить таблицу 'user1' перед введением новой информации? Y/N\n" +
-                        " Все строки таблицы 'user1' успешно удалены\n" +
-                        "Вы хотите ввести новые данные в таблицу 'user1' ? Y/N\n" +
-                        "Пожалуйста, введите данные. Построчно введите id, имя, зарплату \n" +
-                        "Строка данных успешно добавлена в таблицу 'user1' !\n" +
-                        "Вы хотите ввести новые данные в таблицу 'user1' ? Y/N\n" +
-                        "Продолжить работу? Y/'exit'\n" +
-                        "Введите команду\n" +
-                        "Несуществующая команда!\n" +
-                        "------------------------------------\n" +
-                        "|id|name|salary|\n" +
-                        "------------------------------------\n" +
-                        "| 1 |  Ibragim |  1000000 |\n" +
-                        "------------------------------------\n" +
-                        "До скорой встречи!\n"
-                , getData());
-    }
-
-    @Test
     public void TestConnectWithError() {
         in.add("connect|postgres|post");
         in.add("connect|postgres|postgres|111");
@@ -233,6 +219,7 @@ public class IntegrationTest {
     public void TestClearPrintCreatePrintCommands() {
         in.add("connect|postgres|postgres|11111111");
         in.add("clear|user1");
+        in.add("Y");
         in.add("createString|user1|1");
         in.add("createString|user1|1|Stas");
         in.add("createString|user1|1|Stas|1000");
@@ -249,7 +236,8 @@ public class IntegrationTest {
                 "К базе 'postgres' успешно подключились!\n" +
                 "Можем вызвать список таблиц 'list' или вызвать таблицу 'find|baseName'\n" +
                 "Вы действительно хотите удалить все строки таблицы 'user1'? 'Y'/'N'\n" +
-                "Несуществующая команда!\n" +
+                " Все строки таблицы 'user1' успешно удалены\n" +
+                "Неверное количество параметров, разделенных '|', введено: 3\n" +
                 "Неверное количество параметров, разделенных '|', введено: 4\n" +
                 "Строка в таблице 'user1'со значениями id = '1', name = 'Stas', salary = '1000' успешно создана!\n" +
                 "Неверное количество параметров, разделенных '|', введено: 6\n" +
