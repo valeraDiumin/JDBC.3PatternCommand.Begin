@@ -50,7 +50,7 @@ public class Controller {
                     }
                 }
             } while (true);
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e){// если будут проблемы с ексепшинами, они разбираются в самом конце 3 лекции
             viewshka.wright(e.getMessage());
         }
     }
