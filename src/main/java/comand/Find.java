@@ -40,29 +40,29 @@ public class Find implements Command {
             System.out.println(e.getMessage());
         }
 
-        try {
-            if (isTableExistInBase.isTableNameRight(command, manager)) {
-                changingTable(tableName);
-                viewshka.wright("Продолжить работу? Y/'exit'");
+        if (isTableExistInBase.isTableNameRight(command, manager)) {
+            changingTable(tableName);
+            viewshka.wright("Продолжить работу? Y/'exit'");
+            while (true) {
                 String read1 = viewshka.read();
                 if (read1.equals("exit")) {
                     viewshka.wright("До скорой встречи!");
                     throw new ExitException();
                 } else if (read1.equals("Y")) {
                     viewshka.wright("Введите команду");
-
+                    break;
 //                    TODO и как мы повторим работу с выбранной таблицей? как реализуем это в подсказках?
                 } else {
                     viewshka.wright("Несуществующая команда!");
                 }
             }
-        } catch (IllegalArgumentException e){
-            viewshka.wright(e.getMessage());
         }
     }
+
     private int parametersLength() {
         return COMMAND_SAMPLE.split("\\|").length;
     }
+
     private void changingTable(String tableName) {
         viewshka.wright("Вы желаете изменить содержание таблицы '" + tableName + "' ? Y/N");
         String iWishToChangeTable = viewshka.read(); //TODO если что-то другое кроме Y/N, то поправить и предложить снова ввести.....

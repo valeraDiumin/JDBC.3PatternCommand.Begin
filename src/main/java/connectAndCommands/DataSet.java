@@ -1,7 +1,5 @@
 package connectAndCommands;
 
-import java.util.Arrays;
-
 public class DataSet {
 
     public void updateFrom(DataSet newValue) {
@@ -76,11 +74,4 @@ public class DataSet {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "connectAndCommands.DataSet{\n" +
-                "columnNames =" + Arrays.toString(getColumnNames()) + "\n" +
-                "  getColumnValues =" + Arrays.toString(getColumnValues()) + "\n" +
-                '}' + "\n";
-    }
 }

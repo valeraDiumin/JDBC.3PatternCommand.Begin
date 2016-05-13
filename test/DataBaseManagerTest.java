@@ -134,6 +134,10 @@ public abstract class DataBaseManagerTest {
 
         String tableHead = Arrays.toString(manager.getTableHead(tableName1));
         assertEquals("[id, name, salary]", tableHead);
+
+        String format = " %s | ";
+        String getStringFormatted = manager.getStringFormatted(updateData,format);
+        assertEquals(" id |  name |  salary |", getStringFormatted);
     }
     @Test
     public void getTableValueTest() {
@@ -146,5 +150,7 @@ public abstract class DataBaseManagerTest {
         String tableValue = manager.getTableValue(tableName1);
 
         assertEquals("| 3 |  Jack Bob |  1000000 |", tableValue);
+
+
     }
 }

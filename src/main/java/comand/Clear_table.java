@@ -30,26 +30,30 @@ public class Clear_table implements Command {
         String[] strings = command.split("\\|");//
         tableName = strings[1];//
         try {
-            if (command.split("\\|").length != parametersLength()) {
-                throw new IllegalArgumentException(String.format("Неверное количество параметров, " +
-                        "разделенных '|' , " + "необходимо %s, а введено: %s. " +
-                        "Вводите в формате clear|tableName", parametersLength(), command.split("\\|").length));
+            validationAmountOfParameters(command);
+            if (isTableExistInBase.isTableNameRight(command, manager)) {
+                viewshka.wright(String.format("Вы действительно хотите удалить все " +
+                        "строки таблицы '%s'? 'Y'/'N'", tableName));
+                String read1 = viewshka.read();
+                if (read1.equals("N")) {
+                    viewshka.wright("Введите следующую команду");
+                } else if (read1.equals("Y")) {
+                    manager.clear(tableName);
+                    viewshka.wright(" Все строки таблицы '" + tableName + "' успешно удалены");
+                } else {
+                    viewshka.wright("Несуществующая команда!");
+                }
             }
         } catch (Throwable e) {
             System.out.println(e.getMessage());
         }
-        if (isTableExistInBase.isTableNameRight(command, manager)) {
-            viewshka.wright(String.format("Вы действительно хотите удалить все " +
-                    "строки таблицы '%s'? 'Y'/'N'", tableName));
-            String read1 = viewshka.read();
-            if (read1.equals("N")) {
-                viewshka.wright("Введите следующую команду");
-            } else if (read1.equals("Y")) {
-                manager.clear(tableName);
-                viewshka.wright(" Все строки таблицы '" + tableName + "' успешно удалены");
-            } else {
-                viewshka.wright("Несуществующая команда!");
-            }
+    }
+
+    protected void validationAmountOfParameters(String command) {
+        if (command.split("\\|").length != parametersLength()) {
+            throw new IllegalArgumentException(String.format("Неверное количество параметров, " +
+                    "разделенных '|' , " + "необходимо %s, а введено: %s. " +
+                    "Вводите в формате clear|tableName", parametersLength(), command.split("\\|").length));
         }
     }
 

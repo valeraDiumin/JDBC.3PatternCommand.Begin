@@ -26,8 +26,6 @@ public class DeleteTable implements Command {
         try {
             String[] strings = command.split("\\|");
             validationAmountOfParameters(strings);
-
-
             String tableName = strings[1];
             deleteTable(tableName);
 
