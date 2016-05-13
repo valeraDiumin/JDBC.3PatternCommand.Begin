@@ -88,10 +88,12 @@ public abstract class DataBaseManagerTest {
 
         //give first string from array with definite date, created by us
         // and test is data same?
-        DataSet user = users[1];
+        DataSet user0 = users[0];
+        DataSet user1 = users[1];
 
-        assertEquals("[id, name, salary]", Arrays.toString(user.getColumnNames()));
-        assertEquals("[3, Jack, 1000]", Arrays.toString(user.getColumnValues()));
+        assertEquals("[id, name, salary]", Arrays.toString(user1.getColumnNames()));
+        assertEquals("[1, Bob, 10]", Arrays.toString(user0.getColumnValues()));
+        assertEquals("[3, Jack, 1000]", Arrays.toString(user1.getColumnValues()));
     }
     @Test
     public void getSizeTest() { // delete all strings and createString one string
@@ -149,7 +151,7 @@ public abstract class DataBaseManagerTest {
         manager.createString(data, tableName1); // I have to give to method the name of table or hardcode it to method createString
         String tableValue = manager.getTableValue(tableName1);
 
-        assertEquals("| 3 |  Jack Bob |  1000000 |", tableValue);
+        assertEquals("\r|  3 |  Jack Bob |  1000000 |", tableValue);
 
 
     }

@@ -107,11 +107,11 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
     @Override
     public String getTableValue(String tableName) {
-        String result = "|";
+        String result = "\r";// это наполнитель для того, чтобы в строке хоть что-то было, иначе "String index out of range: -1"
         String format = " %s | ";
         DataSet[] dataset = getTableData(tableName);
         for (DataSet aDataset : dataset) {
-            result += getStringValue(aDataset, format) + "\n";
+            result += "| " + getStringValue(aDataset, format) + "\n";
         }
         result = result.substring(0, result.length() - 1);
         return result;

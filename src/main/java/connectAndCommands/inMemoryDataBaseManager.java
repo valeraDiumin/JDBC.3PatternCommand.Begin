@@ -97,12 +97,12 @@ public class inMemoryDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public String getTableValue(String tableName) {//надо или отказаться от "|", или ввести свой getStringFormatted для вывода
+    public String getTableValue(String tableName) {
         String format = " %s | ";
-        String result1 = "|";
+        String result1 = "\r";// это наполнитель для того, чтобы в строке хоть что-то было, иначе "String index out of range: -1"
         DataSet[] getNextStringDataSet = getTableData(tableName);
         for (int i = 0; i < freeIndex; i++) {
-            result1 += getValueFormatted(getNextStringDataSet[i], format) + "\n";
+            result1 += "| " + getValueFormatted(getNextStringDataSet[i], format) + "\n";
         }
         result1 = result1.substring(0, result1.length() - 1);
         return result1;
