@@ -1,3 +1,5 @@
+package model;
+
 import connectAndCommands.DataBaseManager;
 import connectAndCommands.DataSet;
 import org.junit.Before;
