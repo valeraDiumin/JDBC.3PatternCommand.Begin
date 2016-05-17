@@ -1,19 +1,21 @@
 package controller.command;
 
-
 import comand.Command;
 import comand.Exit;
 import comand.ExitException;
 import org.junit.Test;
+import org.mockito.Mockito;
+import view.Viewshka;
 
 import static junit.framework.Assert.fail;
-import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class ExitTest {
-
-   private FakeView view = new FakeView();
+/**
+ * Created by 123 on 16.05.2016.
+ */
+public class ExitTestWithMockito {
+    private Viewshka view = Mockito.mock(Viewshka.class);
 
     @Test
     public void TestCanProcessExitString(){
@@ -45,8 +47,7 @@ public class ExitTest {
         } catch (ExitException e){
             //do nothing
         }
-        //than
-        assertEquals("До скорой встречи!\n", view.getContent());
+        Mockito.verify(view).wright("До скорой встречи!");
     }
 
 }

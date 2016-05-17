@@ -11,7 +11,7 @@ public class Print implements Command {
     private DataBaseManager manager;
     private Viewshka viewshka;
 
-    public Print(DataBaseManager manager, Viewshka viewshka, String tableName, Command[] commands) {
+    public Print(DataBaseManager manager, Viewshka viewshka) {
 
         this.manager = manager;
         this.viewshka = viewshka;

@@ -10,7 +10,7 @@ public class AddStringToTable implements Command {
     private Viewshka viewshka;
     private DataSet dataSet;
 
-    public AddStringToTable(DataBaseManager manager, Viewshka viewshka, String tableName, Command[] commands) {
+    public AddStringToTable(DataBaseManager manager, Viewshka viewshka) {
         this.manager = manager;
         this.viewshka = viewshka;
     }

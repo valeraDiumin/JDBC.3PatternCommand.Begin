@@ -14,6 +14,7 @@ public abstract class DataBaseManagerTest {
 
     protected DataBaseManager manager;
     protected String tableName1;
+//    private Viewshka view;
 
     protected abstract DataBaseManager getDataBaseManager();
 
@@ -154,7 +155,12 @@ public abstract class DataBaseManagerTest {
         String tableValue = manager.getTableValue(tableName1);
 
         assertEquals("\r|  3 |  Jack Bob |  1000000 |", tableValue);
-
-
     }
+//    @Test // сделали тест, аналогичный в лекции 5 25 мин.
+//    public void exitInputTest(){
+//        Exit exit = new Exit(view);
+//        assertTrue(exit.canProcess("exit"));
+//        boolean nonCommand = exit.canProcess("exit");
+//        assertFalse(nonCommand);
+//    }
 }

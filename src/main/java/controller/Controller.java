@@ -17,12 +17,12 @@ public class Controller {
                 new Connect(manager, viewshka),
                 new IsConnected(manager, viewshka),
                 new List(manager, viewshka),
-                new Find(manager, viewshka, commands),
+                new Find(manager, viewshka),
                 new CreateTable(manager, viewshka),
                 new DeleteTable(manager, viewshka),
-                new Print(manager, viewshka, tableName, commands),
-                new AddStringToTable(manager, viewshka, tableName, commands),
-                new Clear_table(manager, viewshka, tableName, commands),
+                new Print(manager, viewshka),
+                new AddStringToTable(manager, viewshka),
+                new Clear_table(manager, viewshka),
                 new Unsupported(viewshka),
         }; //TODO Вы не можете пользоваться командой 'Connect', пока не подсоединились к базе.
     }

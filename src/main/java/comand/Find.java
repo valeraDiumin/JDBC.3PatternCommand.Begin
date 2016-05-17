@@ -12,11 +12,10 @@ public class Find implements Command {
     IsTableExistInBase isTableExistInBase;
     private String COMMAND_SAMPLE = "find|tableName";
 
-    public Find(DataBaseManager manager, Viewshka viewshka, Command[] commands) {
+    public Find(DataBaseManager manager, Viewshka viewshka) {
 
         this.manager = manager;
         this.viewshka = viewshka;
-        this.commands = commands;
         isTableExistInBase = new IsTableExistInBase();
 
     }

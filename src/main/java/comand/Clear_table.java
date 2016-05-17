@@ -11,12 +11,10 @@ public class Clear_table implements Command {
     private String COMMAND_SAMPLE = "clear|user1";
     private IsTableExistInBase isTableExistInBase;
 
-    public Clear_table(DataBaseManager manager, Viewshka viewshka, String tableName, Command[] commands) {
+    public Clear_table(DataBaseManager manager, Viewshka viewshka) {
 
         this.manager = manager;
         this.viewshka = viewshka;
-        this.tableName = tableName;
-        this.commands = commands;
         isTableExistInBase = new IsTableExistInBase();
     }
 
