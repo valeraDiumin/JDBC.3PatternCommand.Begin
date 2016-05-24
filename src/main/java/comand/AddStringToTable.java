@@ -27,7 +27,6 @@ public class AddStringToTable implements Command {
             validationAmountOfParameters(strings);
 
             creatingStringInTable(strings);
-//TODO когда вводим сразу 2 строки одной командой ( как в примере выше), слетает база
         } catch (Throwable e) {
             System.out.println(e.getMessage());
         }

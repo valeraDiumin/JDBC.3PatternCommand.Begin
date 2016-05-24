@@ -50,7 +50,7 @@ public class inMemoryDataBaseManager implements DataBaseManager {
 
     @Override
     public String getStringValue(DataSet input, String formatValue) {
-        return null;
+        return new String("это из Инмемори getStringValue()");
     }
 
     @Override

@@ -51,7 +51,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
     public DataSet[] getTableData(String tableName) {
         int anInt = getSize(tableName);
         DataSet [] result = new DataSet[anInt];
-        try (Statement statement2 = connection.createStatement();ResultSet rs2 = statement2.executeQuery("SELECT * FROM " + tableName + "");){
+        try (Statement statement2 = connection.createStatement();ResultSet rs2 = statement2.executeQuery("SELECT * FROM " + tableName + "")){
             ResultSetMetaData resultSetMetaData = rs2.getMetaData();
             int count = 0;
             while ( rs2.next() ) { // putNewString to connectAndCommands.DataSet column name and insist of the table cell
@@ -88,17 +88,6 @@ public class JDBCDataBaseManager implements DataBaseManager {
         return listOfTables;
     }
 
-    @Override
-    public String getTableValue(String tableName) {
-        String result = "\r";// это наполнитель для того, чтобы в строке хоть что-то было, иначе "String index out of range: -1"
-        String format = " %s | ";
-        DataSet[] dataset = getTableData(tableName);
-        for (DataSet aDataset : dataset) {
-            result += "| " + getStringValue(aDataset, format) + "\n";
-        }
-        result = result.substring(0, result.length() - 1);
-        return result;
-    }
 
     @Override
     public void selectAndPrint(String tableName) {
@@ -191,6 +180,11 @@ public class JDBCDataBaseManager implements DataBaseManager {
             return new String[0];
         }
         return listOfColumns;
+    }
+
+    @Override
+    public String getTableValue(String tableName) {
+        return null;
     }
 
     @Override

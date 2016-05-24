@@ -4,18 +4,19 @@ import comand.Command;
 import comand.Exit;
 import comand.ExitException;
 import org.junit.Test;
-import org.mockito.Mockito;
 import view.Viewshka;
 
 import static junit.framework.Assert.fail;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  * Created by 123 on 16.05.2016.
  */
 public class ExitTestWithMockito {
-    private Viewshka view = Mockito.mock(Viewshka.class);
+    private Viewshka view = mock(Viewshka.class);
 
     @Test
     public void TestCanProcessExitString(){
@@ -47,7 +48,7 @@ public class ExitTestWithMockito {
         } catch (ExitException e){
             //do nothing
         }
-        Mockito.verify(view).wright("До скорой встречи!");
+        verify(view).wright("До скорой встречи!");
     }
 
 }

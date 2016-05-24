@@ -39,7 +39,7 @@ public class Find implements Command {
             System.out.println(e.getMessage());
         }
 
-        if (isTableExistInBase.isTableNameRight(command, manager)) {
+        if (true){//isTableExistInBase.isTableNameRight(command, manager)) {
             changingTable(tableName);
             viewshka.wright("Продолжить работу? Y/'exit'");
             while (true) {
@@ -92,7 +92,6 @@ public class Find implements Command {
                     viewshka.wright("Строка данных успешно добавлена в таблицу '" + tableName + "' !");
                     // TODO при ошибке базы
                     // и распечатке стектрейса пишет "Строка данных успешно добавлена в таблицу 'user1' !"???????
-                    // не хватает "палочки" в начале второй строки данных таблицы
                     // для завершённости ветки find|tableName не хватает (при отказе от добавления строки выпадет, а если я хочу распечатать таблицу?)
                 } else if (read2.equals("N")) {
                     break;

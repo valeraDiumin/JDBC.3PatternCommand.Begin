@@ -1,6 +1,7 @@
 package comand;
 
 import connectAndCommands.DataBaseManager;
+import connectAndCommands.DataSet;
 import view.Viewshka;
 
 /**
@@ -57,9 +58,14 @@ public class Print implements Command {
     }
 
     private void printRows(String tableName) {// Возможно, этот вариант лучше, чем показанный во 2 лекции: преобразование
-        // кода идёт не заходя в класс DataSet, а в DataBaseManager формируем строку отчёта (может, и распечатывать лучше там же)
-        String tableValue = manager.getTableValue(tableName);
-        viewshka.wright(tableValue);
+        String result = "\r";// \r это наполнитель для того, чтобы в строке хоть что-то было, иначе "String index out of range: -1"
+        String format = " %s | ";
+        DataSet[] dataset = manager.getTableData(tableName);
+        for (DataSet aDataset : dataset) {
+            result += "| " + manager.getStringValue(aDataset, format) + "\n";
+        }
+        result = result.substring(0, result.length() - 1);
+        viewshka.wright(result);
         viewshka.wright("------------------------------------");
     }
 }

@@ -144,18 +144,30 @@ public abstract class DataBaseManagerTest {
         String getStringFormatted = manager.getStringFormatted(updateData,format);
         assertEquals(" id |  name |  salary |", getStringFormatted);
     }
-    @Test
-    public void getTableValueTest() {
-        manager.clear(tableName1);
-        DataSet data = new DataSet();
-        data.putNewString("id", 3);
-        data.putNewString("name", "Jack Bob");
-        data.putNewString("salary", "1000000");
-        manager.createString(data, tableName1); // I have to give to method the name of table or hardcode it to method createString
-        String tableValue = manager.getTableValue(tableName1);
+//    @Test
+//    public void getTableValueTest() {//TODO this Test
+//        manager.clear(tableName1);
+//        DataSet data = new DataSet();
+//        data.putNewString("id", 3);
+//        data.putNewString("name", "Jack Bob");
+//        data.putNewString("salary", "1000000");
+//        manager.createString(data, tableName1); // I have to give to method the name of table or hardcode it to method createString
+//        DataSet[] tableData = manager.getTableData(tableName1);
+//
+//            String result = "\r";// это наполнитель для того, чтобы в строке хоть что-то было, иначе "String index out of range: -1"
+//            String format = " %s | ";
+//            for (DataSet aDataset : tableData) {
+//                result += "| " + manager.getStringValue(aDataset, format) + "\n";
+//            }
+//            result = result.substring(0, result.length() - 1);
+//
+//
+//        assertEquals("\r|  3 |  Jack Bob |  1000000 |", result);
+//    }
 
-        assertEquals("\r|  3 |  Jack Bob |  1000000 |", tableValue);
-    }
+
+
+
 //    @Test // сделали тест, аналогичный в лекции 5 25 мин.
 //    public void exitInputTest(){
 //        Exit exit = new Exit(view);
