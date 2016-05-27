@@ -15,9 +15,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.mockito.internal.verification.VerificationModeFactory.atLeastOnce;
 
-/**
- * Created by 123 on 16.05.2016.
- */
+
 public class PrintTest {
     private DataBaseManager manager;
     private Command command;
@@ -114,7 +112,7 @@ public class PrintTest {
         manager.createString(dataSet2, "user1");
 
         DataSet[] dataSet = new DataSet[]{dataSet1};//, dataSet2};
-        when(manager.getTableData("user1")).thenReturn(new DataSet[1]);
+        when(manager.getTableData("user1")).thenReturn(dataSet);
 
         command.process("print|user1");
 
@@ -122,24 +120,6 @@ public class PrintTest {
         shouldPrint("[------------------------------------, |id|name|salary|, ------------------------------------, \r" +
                 "| null, ------------------------------------]");//TODO I dont know???????????????????
     }
-//    @Test
-//    public void getTableDataTest() {
-//        manager.clear(tableName1);
-//
-//        DataSet data = new DataSet();
-//        data.putNewString("id", 3);
-//        data.putNewString("name", "Jack Bob");
-//        data.putNewString("salary", "1000000");
-//        manager.createString(data, tableName1); // I have to give to method the name of table or hardcode it to method createString
-//        DataSet[] users = manager.getTableData(tableName1);
-//
-//        assertEquals(1, users.length);
-//        DataSet user = users[0];
-//
-//        assertEquals("[id, name, salary]", Arrays.toString(user.getColumnNames()));
-//        assertEquals("[3, Jack Bob, 1000000]", Arrays.toString(user.getColumnValues()));
-//
-//    }
 
     private void shouldPrint(String expected) {
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
